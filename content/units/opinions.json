@@ -1,0 +1,26 @@
+{
+  "id": "opinions",
+  "title": "Opinions and courtesy",
+  "subtitle": "Share what you think, ask politely, part warmly",
+  "level": "advanced",
+  "accent": "red",
+  "phrases": [
+    { "id": "o-ishta", "kn": "ನನಗೆ ಇದು ತುಂಬಾ ಇಷ್ಟ ಆಯ್ತು", "tr": "nanage idu tumba ishta aaytu", "alt": ["nanage idu tumba ishta ayitu"], "en": "I liked this a lot", "reviewed": false },
+    { "id": "o-sari", "kn": "ನೀವು ಹೇಳೋದು ಸರಿ", "tr": "neevu heloodu sari", "alt": ["nivu helodu sari"], "en": "What you say is right", "reviewed": false },
+    { "id": "o-gottilla", "kn": "ನನಗೆ ಗೊತ್ತಿಲ್ಲ", "tr": "nanage gottilla", "en": "I do not know", "reviewed": false },
+    { "id": "o-kashta", "kn": "ಇದು ಸ್ವಲ್ಪ ಕಷ್ಟ", "tr": "idu swalpa kashta", "en": "This is a bit difficult", "reviewed": false },
+    { "id": "o-sahaya", "kn": "ಒಂದು ಸಹಾಯ ಬೇಕಿತ್ತು", "tr": "ondu sahaaya bekittu", "alt": ["ondu sahaya bekittu"], "en": "I needed a little help", "note": "A soft, polite way to open a request.", "reviewed": false },
+    { "id": "o-tondare", "kn": "ನಿಮಗೆ ತೊಂದರೆ ಆಗಲ್ಲ ಅಂದ್ರೆ", "tr": "nimage tondare aagalla andre", "alt": ["nimage tondare agalla andre"], "en": "If it is no trouble to you", "reviewed": false },
+    { "id": "o-maadtira", "kn": "ಸ್ವಲ್ಪ ಸಹಾಯ ಮಾಡ್ತೀರಾ?", "tr": "swalpa sahaaya maadtira?", "alt": ["swalpa sahaya maadtira?"], "en": "Will you help me a little?", "reviewed": false },
+    { "id": "o-tada", "kn": "ಕ್ಷಮಿಸಿ, ತಡ ಆಯ್ತು", "tr": "kshamisi, tada aaytu", "alt": ["kshamisi tada aaytu", "kshamisi tada ayitu"], "en": "Sorry, I am late", "reviewed": false },
+    { "id": "o-chinte", "kn": "ಚಿಂತೆ ಮಾಡಬೇಡಿ", "tr": "chinte maadabedi", "alt": ["chinte madabedi"], "en": "Do not worry", "reviewed": false },
+    { "id": "o-khushi", "kn": "ನಿಮ್ಮನ್ನ ಭೇಟಿ ಮಾಡಿ ಖುಷಿ ಆಯ್ತು", "tr": "nimmanna bheti maadi khushi aaytu", "alt": ["nimmanna bheti madi khushi ayitu"], "en": "I am happy to have met you", "reviewed": false },
+    { "id": "o-habba", "kn": "ಹಬ್ಬದ ಶುಭಾಶಯಗಳು", "tr": "habbada shubhaashayagalu", "alt": ["habbada shubhashayagalu"], "en": "Happy festival wishes", "reviewed": false },
+    { "id": "o-matte", "kn": "ಮತ್ತೆ ಸಿಗೋಣ", "tr": "matte sigona", "en": "Let us meet again", "reviewed": false }
+  ],
+  "lessons": [
+    { "id": "share-opinion", "title": "Share an opinion", "blurb": "Agree, like, and admit you do not know", "phrases": ["o-ishta", "o-sari", "o-gottilla", "o-kashta"] },
+    { "id": "polite-requests", "title": "Polite requests", "blurb": "Ask for help the soft way", "phrases": ["o-sahaya", "o-tondare", "o-maadtira", "o-tada"] },
+    { "id": "warm-closings", "title": "Warm closings", "blurb": "Reassure, celebrate and say see you", "phrases": ["o-chinte", "o-khushi", "o-habba", "o-matte"] }
+  ]
+}

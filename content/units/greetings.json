@@ -1,0 +1,43 @@
+{
+  "id": "greetings",
+  "title": "Greetings",
+  "subtitle": "Say hello, be polite, introduce yourself",
+  "level": "beginner",
+  "accent": "yellow",
+  "phrases": [
+    { "id": "g-namaskara", "kn": "ನಮಸ್ಕಾರ", "tr": "namaskara", "alt": ["namaskaara"], "en": "Hello", "note": "Works at any time of day, with anyone.", "reviewed": false },
+    { "id": "g-shubhodaya", "kn": "ಶುಭೋದಯ", "tr": "shubhodaya", "en": "Good morning", "reviewed": false },
+    { "id": "g-shubharatri", "kn": "ಶುಭ ರಾತ್ರಿ", "tr": "shubha raatri", "alt": ["shubha ratri"], "en": "Good night", "reviewed": false },
+    { "id": "g-haudu", "kn": "ಹೌದು", "tr": "haudu", "en": "Yes", "reviewed": false },
+    { "id": "g-illa", "kn": "ಇಲ್ಲ", "tr": "illa", "en": "No", "note": "Also means \"there is none\".", "reviewed": false },
+    { "id": "g-dhanyavada", "kn": "ಧನ್ಯವಾದಗಳು", "tr": "dhanyavaadagalu", "alt": ["dhanyavadagalu"], "en": "Thank you", "reviewed": false },
+    { "id": "g-dayavittu", "kn": "ದಯವಿಟ್ಟು", "tr": "dayavittu", "en": "Please", "reviewed": false },
+    { "id": "g-kshamisi", "kn": "ಕ್ಷಮಿಸಿ", "tr": "kshamisi", "en": "Sorry / Excuse me", "reviewed": false },
+    { "id": "g-sari", "kn": "ಸರಿ", "tr": "sari", "en": "Okay", "note": "Used all the time, just like \"okay\" in English.", "reviewed": false },
+    { "id": "g-bye", "kn": "ಹೋಗಿ ಬರ್ತೀನಿ", "tr": "hogi bartini", "alt": ["hogi barteeni"], "en": "Bye (I'll go and come back)", "note": "Kannada has no word for \"goodbye\". People say \"I'll go and come back\".", "reviewed": false },
+    { "id": "g-hegiddira", "kn": "ಹೇಗಿದ್ದೀರಾ?", "tr": "hegiddira?", "alt": ["hegiddeera?"], "en": "How are you?", "note": "The -ra ending is the polite form.", "reviewed": false },
+    { "id": "g-chennagiddini", "kn": "ನಾನು ಚೆನ್ನಾಗಿದ್ದೀನಿ", "tr": "naanu chennaagiddini", "alt": ["nanu chennagiddini"], "en": "I am fine", "reviewed": false },
+    { "id": "g-hesaru-enu", "kn": "ನಿಮ್ಮ ಹೆಸರು ಏನು?", "tr": "nimma hesaru enu?", "en": "What is your name?", "reviewed": false },
+    { "id": "g-nanna-hesaru", "kn": "ನನ್ನ ಹೆಸರು ಆಕಾಶ್", "tr": "nanna hesaru Aakaash", "alt": ["nanna hesaru akash"], "en": "My name is Akash", "note": "Swap Akash for your own name.", "reviewed": false }
+  ],
+  "lessons": [
+    {
+      "id": "say-hello",
+      "title": "Say hello",
+      "blurb": "Hello, good morning, yes and no",
+      "phrases": ["g-namaskara", "g-shubhodaya", "g-shubharatri", "g-haudu", "g-illa"]
+    },
+    {
+      "id": "be-polite",
+      "title": "Be polite",
+      "blurb": "Thanks, please, sorry and bye",
+      "phrases": ["g-dhanyavada", "g-dayavittu", "g-kshamisi", "g-sari", "g-bye"]
+    },
+    {
+      "id": "meet-someone",
+      "title": "Meet someone",
+      "blurb": "Ask how they are and share your name",
+      "phrases": ["g-hegiddira", "g-chennagiddini", "g-hesaru-enu", "g-nanna-hesaru"]
+    }
+  ]
+}
