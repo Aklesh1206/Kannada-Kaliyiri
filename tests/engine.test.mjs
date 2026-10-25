@@ -118,7 +118,9 @@ test("tokenize drops punctuation", () => {
   assert.deepEqual(tokenize("nimma hesaru enu?"), ["nimma", "hesaru", "enu"]);
 });
 
-import { pickPool, makeDeck, makeQuestion, memoryScore, speedPoints, gameXp, fallSeconds } from "../lib/games.ts";
+import { pickPool, makeDeck, makeQuestion, memoryScore, speedPoints, gameXp, fallSeconds, makeBuild, orderCorrect, trTokens, questOptions, questProblems, questScore, questStars } from "../lib/games.ts";
+
+const quests = JSON.parse(readFileSync(new URL("../content/quests.json", import.meta.url), "utf8"));
 
 test("games: pickPool uses finished lessons, else the whole level", () => {
   const u = units[0];
@@ -162,4 +164,36 @@ test("games: scoring helpers", () => {
   assert.equal(gameXp(0), 0);
   assert.ok(gameXp(10) >= 2 && gameXp(100000) <= 20);
   assert.equal(fallSeconds(100), 3.5);
+});
+
+test("games: word builder tiles are a shuffle of the phrase words", () => {
+  const pool = units.flatMap((u) => u.phrases);
+  for (let seed = 1; seed <= 25; seed++) {
+    const r = makeBuild(pool, seeded(seed));
+    assert.ok(r.answer.length >= 2 && r.answer.length <= 7);
+    assert.deepEqual(r.tiles.map((t) => t.text).sort(), [...r.answer].sort());
+    assert.ok(orderCorrect(r.answer, r.answer));
+  }
+  assert.deepEqual(trTokens("ellige hogabeku?"), ["ellige", "hogabeku"]);
+  assert.equal(makeBuild([{ id: "x", kn: "x", tr: "one", en: "one", reviewed: false }]), null);
+  assert.equal(orderCorrect(["a", "b"], ["b", "a"]), false);
+});
+
+test("quests: content points at real phrases and every step is answerable", () => {
+  const known = new Set(units.flatMap((u) => u.phrases.map((p) => p.id)));
+  const byId = Object.fromEntries(units.flatMap((u) => u.phrases).map((p) => [p.id, p]));
+  assert.ok(quests.length >= 1);
+  for (const q of quests) {
+    assert.deepEqual(questProblems(q, known), []);
+    for (const s of q.steps) {
+      const opts = questOptions(s, byId, seeded(7));
+      assert.equal(opts.length, 1 + s.wrong.length);
+      assert.ok(opts.some((o) => o.id === s.answer));
+    }
+  }
+  assert.equal(questScore(6, 0), 600);
+  assert.equal(questScore(6, 100), 50);
+  assert.equal(questStars(0), 3);
+  assert.equal(questStars(3), 2);
+  assert.equal(questStars(9), 1);
 });

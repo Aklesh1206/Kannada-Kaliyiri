@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { LEVELS, lessonKey, lessonOrderForLevel, unitsForLevel } from "@/lib/content";
-import { duePhraseIds, liveStreak, setLevel, useHydrated, useProgress } from "@/lib/progress";
+import { lessonKey, lessonOrderForLevel, unitsForLevel } from "@/lib/content";
+import { duePhraseIds, liveStreak, useHydrated, useProgress } from "@/lib/progress";
+import { LevelMeter } from "./LevelMeter";
 import { NeelaSays } from "./Neela";
 import { Onboarding } from "./Onboarding";
 import { SpeakerButton } from "./SpeakerButton";
@@ -70,13 +71,15 @@ export function HomePath() {
         </NeelaSays>
       </div>
 
+      {level && <LevelMeter />}
+
       <Link
         href="/games"
         className="press flex items-center justify-between gap-4 rounded-2xl border-2 border-arishina-deep bg-arishina-wash px-5 py-4 shadow-[0_4px_0_0_var(--arishina-deep)]"
       >
         <span>
           <span className="block text-xl font-bold">Play games</span>
-          <span className="block text-base text-ink-soft">Memory Flip, Speed Round and Sky Catch</span>
+          <span className="block text-base text-ink-soft">5 quick games and story quests</span>
         </span>
         <span className="text-3xl" aria-hidden="true">
           🎮
@@ -97,24 +100,6 @@ export function HomePath() {
       )}
 
       {!hydrated && <div className="min-h-64" aria-busy="true" />}
-
-      {level && (
-        <div role="group" aria-label="Skill level" className="flex gap-2 rounded-2xl bg-line p-1">
-          {LEVELS.map((l) => (
-            <button
-              key={l.id}
-              type="button"
-              aria-pressed={l.id === level}
-              onClick={() => setLevel(l.id)}
-              className={`flex-1 rounded-xl px-2 py-2 text-base font-bold ${
-                l.id === level ? "bg-paper text-ink shadow" : "text-ink-soft"
-              }`}
-            >
-              {l.label}
-            </button>
-          ))}
-        </div>
-      )}
 
       {levelUnits.map((unit) => {
         const isYellow = unit.accent === "yellow";

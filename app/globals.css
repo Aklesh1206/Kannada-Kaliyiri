@@ -136,3 +136,21 @@ body {
   .splash-dots span, .onboard-step { animation: none; }
   .splash { transition: none; }
 }
+
+/* Level meter: Neela rides the tip of the fill and pushes it forward */
+.meter-fill { transition: width 1.5s cubic-bezier(0.5, 0, 0.2, 1); }
+.meter-neela { transition: left 1.5s cubic-bezier(0.5, 0, 0.2, 1); }
+@keyframes badge-pop { 0% { opacity: 0; transform: translateY(8px) scale(0.9); } 20%, 80% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; } }
+.meter-badge { animation: badge-pop 1.9s ease-out forwards; }
+@keyframes meter-push { 0%, 100% { transform: scaleY(1); box-shadow: 0 0 0 0 rgba(255, 194, 14, 0); } 40% { transform: scaleY(1.7); box-shadow: 0 0 14px 4px rgba(255, 194, 14, 0.7); } }
+.meter-push { animation: meter-push 1.5s ease-in-out; }
+@media (prefers-reduced-motion: reduce) {
+  .meter-push { animation: none; }
+  .meter-fill, .meter-neela { transition: none; }
+  .meter-badge { animation: none; }
+}
+
+/* Word Builder wrong-order shake */
+@keyframes builder-shake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
+.builder-shake { animation: builder-shake 0.4s ease-in-out; }
+@media (prefers-reduced-motion: reduce) { .builder-shake { animation: none; } }

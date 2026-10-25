@@ -1,0 +1,32 @@
+[
+  {
+    "id": "auto-ride",
+    "title": "Auto ride home",
+    "blurb": "Flag an auto, set the meter, give directions and ask for change.",
+    "icon": "🛺",
+    "unitId": "auto",
+    "steps": [
+      { "scene": "You spot an empty auto at the roadside and wave it down.", "goal": "Ask the driver: Will you come?", "answer": "a-bartira", "wrong": ["a-nillisi", "a-beda", "a-edakke"] },
+      { "scene": "He nods. Before you climb in, you want a fair fare.", "goal": "Ask him to put the meter on", "answer": "a-meter", "wrong": ["a-balakke", "a-beda", "a-jasti"] },
+      { "scene": "The road ahead is clear. You want him to keep going.", "goal": "Tell him: Go straight", "answer": "a-nera", "wrong": ["a-nillisi", "a-kadime", "a-bartira"] },
+      { "scene": "At the junction, your street is on the left.", "goal": "Tell him: Turn left", "answer": "a-edakke", "wrong": ["a-balakke", "a-meter", "a-eshtu"] },
+      { "scene": "There is your gate. Time to get off.", "goal": "Tell him: Stop here", "answer": "a-nillisi", "wrong": ["a-nera", "a-chillare", "a-elli"] },
+      { "scene": "He tells you the fare, and you only have a big note.", "goal": "Ask: Do you have change?", "answer": "a-chillare", "wrong": ["a-jasti", "a-kadime", "a-eshtu"] }
+    ]
+  },
+  {
+    "id": "meet-neighbour",
+    "title": "Meet the neighbour",
+    "blurb": "Say hello, ask how she is and swap names on the stairs.",
+    "icon": "🏡",
+    "unitId": "greetings",
+    "steps": [
+      { "scene": "You meet a friendly neighbour on the stairs.", "goal": "Say: Hello", "answer": "g-namaskara", "wrong": ["g-bye", "g-illa", "g-shubharatri"] },
+      { "scene": "She smiles. You would like to know how she is.", "goal": "Ask: How are you?", "answer": "g-hegiddira", "wrong": ["g-nanna-hesaru", "g-chennagiddini", "g-haudu"] },
+      { "scene": "She asks you the same.", "goal": "Say: I am fine", "answer": "g-chennagiddini", "wrong": ["g-hegiddira", "g-illa", "g-dayavittu"] },
+      { "scene": "You realise you have not been introduced.", "goal": "Ask: What is your name?", "answer": "g-hesaru-enu", "wrong": ["g-nanna-hesaru", "g-dhanyavada", "g-sari"] },
+      { "scene": "She tells you her name, then waits for yours.", "goal": "Say: My name is Aakash", "answer": "g-nanna-hesaru", "wrong": ["g-hesaru-enu", "g-kshamisi", "g-haudu"] },
+      { "scene": "It is time to head upstairs.", "goal": "Say goodbye", "answer": "g-bye", "wrong": ["g-namaskara", "g-shubhodaya", "g-dhanyavada"] }
+    ]
+  }
+]

@@ -35,6 +35,26 @@ export type Unit = {
   lessons: Lesson[];
 };
 
+export type QuestStep = {
+  /** Short narration of the situation */
+  scene: string;
+  /** What the learner wants to say, in English */
+  goal: string;
+  /** Phrase id that does the job */
+  answer: string;
+  /** Phrase ids that do not */
+  wrong: string[];
+};
+
+export type Quest = {
+  id: string;
+  title: string;
+  blurb: string;
+  icon: string;
+  unitId: string;
+  steps: QuestStep[];
+};
+
 export type ChooseMode = "kn-to-en" | "en-to-tr" | "listen-to-en";
 
 export type Option = { id: string; label: string };

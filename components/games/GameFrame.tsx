@@ -14,8 +14,8 @@ export function useGamePool(): Phrase[] {
   return useMemo(() => pickPool(unitsForLevel(p.level ?? "beginner"), p.completed), [p.level, p.completed]);
 }
 
-export function GameFrame({ title, children }: { title: string; children: (pool: Phrase[]) => ReactNode }) {
-  const hydrated = useHydrated();
+/** Page chrome for a game: back arrow and title. */
+export function GameShell({ title, children }: { title: string; children: ReactNode }) {
   return (
     <div className="mx-auto flex min-h-screen w-full max-w-2xl flex-col px-4 pb-16">
       <header className="flex items-center gap-4 py-4">
@@ -28,8 +28,17 @@ export function GameFrame({ title, children }: { title: string; children: (pool:
         </Link>
         <h1 className="text-2xl font-extrabold">{title}</h1>
       </header>
-      {hydrated ? <Inner>{children}</Inner> : <div aria-busy="true" className="min-h-64" />}
+      {children}
     </div>
+  );
+}
+
+export function GameFrame({ title, children }: { title: string; children: (pool: Phrase[]) => ReactNode }) {
+  const hydrated = useHydrated();
+  return (
+    <GameShell title={title}>
+      {hydrated ? <Inner>{children}</Inner> : <div aria-busy="true" className="min-h-64" />}
+    </GameShell>
   );
 }
 
@@ -45,6 +54,7 @@ export function ResultCard({
   xp,
   onAgain,
   detail,
+  stars,
 }: {
   score: number;
   best: number;
@@ -52,11 +62,18 @@ export function ResultCard({
   xp: number;
   onAgain: () => void;
   detail?: string;
+  stars?: number;
 }) {
   return (
     <div className="flex flex-col items-center gap-4 text-center">
       <p className="kn text-5xl font-bold text-kumkuma">{isBest ? "ಅದ್ಭುತ!" : "ಶಭಾಷ್!"}</p>
       <p className="text-lg font-bold">{isBest ? "New best score!" : "Nice round!"}</p>
+      {stars !== undefined && (
+        <p className="text-4xl" aria-label={`${stars} of 3 stars`}>
+          {"★".repeat(stars)}
+          <span className="text-line">{"★".repeat(3 - stars)}</span>
+        </p>
+      )}
       <div className="flex gap-4">
         <div className="min-w-28 rounded-2xl border-2 border-arishina bg-arishina-wash px-4 py-3">
           <p className="text-sm font-semibold text-ink-soft">Score</p>

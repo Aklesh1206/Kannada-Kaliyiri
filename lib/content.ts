@@ -2,7 +2,10 @@ import greetings from "@/content/units/greetings.json";
 import auto from "@/content/units/auto.json";
 import conversation from "@/content/units/conversation.json";
 import opinions from "@/content/units/opinions.json";
-import type { Lesson, Level, Phrase, Unit } from "./types";
+import quests_ from "@/content/quests.json";
+import type { Lesson, Level, Phrase, Quest, Unit } from "./types";
+
+export const quests: Quest[] = quests_ as Quest[];
 
 /** Units appear on the home path in this order. Add a new JSON file and list it here. */
 export const units: Unit[] = [greetings, auto, conversation, opinions] as Unit[];
