@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { LEVELS, lessonOrderForLevel } from "@/lib/content";
 import { setLevel, useProgress } from "@/lib/progress";
 import type { Level } from "@/lib/types";
+import { LevelPills } from "./LevelPills";
 import { Neela, NeelaSays } from "./Neela";
 
 const MOVE_MS = 1500;
@@ -25,7 +26,6 @@ export function LevelMeter() {
   // Each level starts with a small head start, so moving up always pushes the meter forward
   const pct = ((idx + 0.12 + 0.88 * frac) / LEVELS.length) * 100;
 
-  const [open, setOpen] = useState(false);
   const [moving, setMoving] = useState<string | null>(null);
   const [dismissed, setDismissed] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -39,7 +39,6 @@ export function LevelMeter() {
   const ready = frac >= 1 && Boolean(next) && !dismissed && !moving;
 
   function change(to: Level) {
-    setOpen(false);
     setDismissed(false);
     if (to === level) return;
     const target = LEVELS.find((l) => l.id === to);
@@ -55,20 +54,15 @@ export function LevelMeter() {
 
   return (
     <section aria-label="Your level" className="flex flex-col gap-3 rounded-2xl border-2 border-line bg-raised px-4 pb-4 pt-3">
-      <button
-        type="button"
-        onClick={() => setOpen((o) => !o)}
-        aria-expanded={open}
-        className="flex items-center justify-between gap-3 text-left"
-      >
+      <div className="flex items-center justify-between gap-3">
         <span>
           <span className="block text-sm font-semibold text-ink-soft">Your level</span>
           <span className="block text-xl font-extrabold">{current.label}</span>
         </span>
         <span className="text-sm font-semibold text-ink-soft">
-          {done}/{keys.length} lessons · {open ? "Close" : "Change"}
+          {done}/{keys.length} lessons
         </span>
-      </button>
+      </div>
 
       <div className="relative mt-9">
         <div
@@ -101,6 +95,11 @@ export function LevelMeter() {
         ))}
       </div>
 
+      <div className="flex flex-col gap-1">
+        <p className="text-sm font-semibold text-ink-soft">Neela asks: which level feels right?</p>
+        <LevelPills onChange={change} />
+      </div>
+
       {ready && next && (
         <NeelaSays mood="happy" size={56}>
           <span className="block font-bold">You finished every {current.label} lesson!</span>
@@ -120,27 +119,6 @@ export function LevelMeter() {
         </NeelaSays>
       )}
 
-      {open && (
-        <NeelaSays mood="idle" size={56}>
-          <span className="block font-bold">How is it going? Which level feels right?</span>
-          <span className="mt-2 flex flex-wrap gap-2" role="radiogroup" aria-label="Choose a level">
-            {LEVELS.map((l) => (
-              <button
-                key={l.id}
-                type="button"
-                role="radio"
-                aria-checked={l.id === level}
-                onClick={() => change(l.id)}
-                className={`press rounded-xl border-2 px-3 py-2 font-bold ${
-                  l.id === level ? "border-arishina-deep bg-arishina-wash" : "border-line bg-paper"
-                }`}
-              >
-                {l.label}
-              </button>
-            ))}
-          </span>
-        </NeelaSays>
-      )}
     </section>
   );
 }
