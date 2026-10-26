@@ -1,8 +1,51 @@
 // Runtime code here must not import other lib files, so Node can run the tests directly.
-import type { Phrase, Quest, QuestStep, Unit } from "./types";
+import type { Level, Phrase, Quest, QuestStep, Unit } from "./types";
 
 export type GameId = "memory" | "speed" | "catch" | "builder" | "listen";
 type Rng = () => number;
+
+/** How hard each game is at each level. Harder levels have more cards, less time, more choices and fewer hints. */
+export type Difficulty = {
+  memoryPairs: number;
+  speedSeconds: number;
+  speedOptions: number;
+  catchOptions: number;
+  /** Seconds a word takes to fall in round 0, and the quickest it ever gets */
+  fallBase: number;
+  fallFloor: number;
+  builderSeconds: number;
+  builderMin: number;
+  builderMax: number;
+  listenOptions: number;
+  listenLives: number;
+  questOptions: number;
+  /** Show the Roman spelling next to Kannada script */
+  showRoman: boolean;
+  summary: string;
+};
+
+export const DIFFICULTY: Record<Level, Difficulty> = {
+  beginner: {
+    memoryPairs: 6, speedSeconds: 60, speedOptions: 3, catchOptions: 3, fallBase: 9.5, fallFloor: 4.5,
+    builderSeconds: 75, builderMin: 2, builderMax: 4, listenOptions: 3, listenLives: 4, questOptions: 3, showRoman: true,
+    summary: "Beginner mode: 6 card pairs, longer timers, 3 choices and Roman spelling shown.",
+  },
+  intermediate: {
+    memoryPairs: 8, speedSeconds: 45, speedOptions: 4, catchOptions: 3, fallBase: 8, fallFloor: 3.5,
+    builderSeconds: 60, builderMin: 2, builderMax: 5, listenOptions: 4, listenLives: 3, questOptions: 4, showRoman: true,
+    summary: "Intermediate mode: 8 card pairs, 45 second rounds, 4 choices.",
+  },
+  advanced: {
+    memoryPairs: 10, speedSeconds: 30, speedOptions: 5, catchOptions: 4, fallBase: 6.5, fallFloor: 2.8,
+    builderSeconds: 45, builderMin: 3, builderMax: 7, listenOptions: 5, listenLives: 2, questOptions: 4, showRoman: false,
+    summary: "Advanced mode: 10 card pairs, 30 second rounds, 5 choices and no Roman spelling. Read the script!",
+  },
+};
+
+/** High scores are kept per level, so each level has its own leaderboard. */
+export function scoreKey(game: string, level: Level): string {
+  return `${game}:${level}`;
+}
 
 export const GAMES: { id: GameId; title: string; blurb: string; icon: string }[] = [
   { id: "memory", title: "Memory Flip", blurb: "Flip cards and match each Kannada phrase to its meaning.", icon: "🃏" },
@@ -94,8 +137,8 @@ export function gameXp(score: number): number {
 }
 
 /** Sky Catch: seconds a word takes to fall, faster each round but never below 3.5. */
-export function fallSeconds(round: number): number {
-  return Math.max(3.5, 8 - round * 0.35);
+export function fallSeconds(round: number, base = 8, floor = 3.5): number {
+  return Math.max(floor, base - round * 0.35);
 }
 
 /** Words of a transliteration without punctuation. */
@@ -107,12 +150,14 @@ export type Tile = { id: number; text: string };
 export type BuildRound = { phrase: Phrase; answer: string[]; tiles: Tile[] };
 
 /** A phrase of 2 to 7 words, cut into shuffled tiles. Null when the pool has no such phrase. */
-export function makeBuild(pool: Phrase[], rng: Rng = Math.random, avoidId?: string): BuildRound | null {
-  const fits = (p: Phrase) => {
+export function makeBuild(pool: Phrase[], rng: Rng = Math.random, avoidId?: string, min = 2, max = 7): BuildRound | null {
+  const within = (lo: number, hi: number) => (p: Phrase) => {
     const n = trTokens(p.tr).length;
-    return n >= 2 && n <= 7;
+    return n >= lo && n <= hi;
   };
-  const all = pool.filter(fits);
+  // If the level has no phrase of the wanted length, fall back to any usable phrase
+  const ranged = pool.filter(within(min, max));
+  const all = ranged.length ? ranged : pool.filter(within(2, 7));
   const list = all.filter((p) => p.id !== avoidId);
   const options = list.length ? list : all;
   if (!options.length) return null;
@@ -134,8 +179,9 @@ export function buildPoints(firstTry: boolean): number {
 }
 
 /** The options for one quest step: the right phrase among the wrong ones, shuffled. */
-export function questOptions(step: QuestStep, byId: Record<string, Phrase>, rng: Rng = Math.random): Phrase[] {
-  return shuffled([step.answer, ...step.wrong].map((id) => byId[id]).filter((p): p is Phrase => Boolean(p)), rng);
+export function questOptions(step: QuestStep, byId: Record<string, Phrase>, rng: Rng = Math.random, count?: number): Phrase[] {
+  const wrong = count ? step.wrong.slice(0, Math.max(1, count - 1)) : step.wrong;
+  return shuffled([step.answer, ...wrong].map((id) => byId[id]).filter((p): p is Phrase => Boolean(p)), rng);
 }
 
 export function questScore(steps: number, mistakes: number): number {

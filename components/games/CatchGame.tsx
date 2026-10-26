@@ -2,20 +2,21 @@
 
 import { useEffect, useState } from "react";
 import type { Phrase } from "@/lib/types";
-import { fallSeconds, gameXp, makeQuestion } from "@/lib/games";
+import { fallSeconds, gameXp, makeQuestion, scoreKey } from "@/lib/games";
 import type { Question } from "@/lib/games";
 import { recordGame, useProgress } from "@/lib/progress";
 import { Neela, NeelaSays } from "../Neela";
-import { ResultCard } from "./GameFrame";
+import { ResultCard, useDifficulty } from "./GameFrame";
 
 const LIVES = 3;
 type Result = { score: number; xp: number; isBest: boolean; prevBest: number };
 
 export function CatchGame({ pool }: { pool: Phrase[] }) {
-  const best = useProgress().highScores.catch ?? 0;
+  const { level, d } = useDifficulty();
+  const best = useProgress().highScores[scoreKey("catch", level)] ?? 0;
   const [started, setStarted] = useState(false);
   const [round, setRound] = useState(0);
-  const [question, setQuestion] = useState<Question>(() => makeQuestion(pool, 3));
+  const [question, setQuestion] = useState<Question>(() => makeQuestion(pool, d.catchOptions));
   const [score, setScore] = useState(0);
   const [lives, setLives] = useState(LIVES);
   const [wrong, setWrong] = useState<string[]>([]);
@@ -25,11 +26,11 @@ export function CatchGame({ pool }: { pool: Phrase[] }) {
   function nextRound(nextScore: number, nextLives: number) {
     if (nextLives <= 0) {
       const xp = gameXp(nextScore * 10);
-      const isBest = recordGame("catch", nextScore * 10, xp);
+      const isBest = recordGame(scoreKey("catch", level), nextScore * 10, xp);
       setResult({ score: nextScore * 10, xp, isBest, prevBest: best });
       return;
     }
-    setQuestion(makeQuestion(pool, 3, Math.random, question.phrase.id));
+    setQuestion(makeQuestion(pool, d.catchOptions, Math.random, question.phrase.id));
     setWrong([]);
     setRound((r) => r + 1);
   }
@@ -72,7 +73,7 @@ export function CatchGame({ pool }: { pool: Phrase[] }) {
     setWrong([]);
     setMood("idle");
     setResult(null);
-    setQuestion(makeQuestion(pool, 3));
+    setQuestion(makeQuestion(pool, d.catchOptions));
   }
 
   if (!started) {
@@ -109,7 +110,7 @@ export function CatchGame({ pool }: { pool: Phrase[] }) {
     );
   }
 
-  const secs = fallSeconds(round);
+  const secs = fallSeconds(round, d.fallBase, d.fallFloor);
   return (
     <>
       <div className="flex items-center justify-between font-bold">
@@ -133,8 +134,8 @@ export function CatchGame({ pool }: { pool: Phrase[] }) {
               disabled={isWrong}
               onClick={() => pick(o.id)}
               onAnimationEnd={isRight ? missed : undefined}
-              style={{ left: `${i * 33.33 + 1.5}%`, animationDuration: `${secs}s` }}
-              className={`sky-fall press absolute w-[30%] rounded-xl border-2 px-2 py-3 text-center text-sm font-bold sm:text-base ${
+              style={{ left: `${i * (100 / question.options.length) + 1}%`, width: `${100 / question.options.length - 2}%`, animationDuration: `${secs}s` }}
+              className={`sky-fall press absolute rounded-xl border-2 px-2 py-3 text-center text-sm font-bold sm:text-base ${
                 isWrong ? "border-kumkuma bg-kumkuma-wash opacity-50" : "border-arishina-deep bg-raised"
               }`}
             >

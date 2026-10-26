@@ -2,22 +2,22 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { Phrase } from "@/lib/types";
-import { buildPoints, gameXp, makeBuild, orderCorrect } from "@/lib/games";
+import { buildPoints, gameXp, makeBuild, orderCorrect, scoreKey } from "@/lib/games";
 import type { BuildRound } from "@/lib/games";
 import { recordGame, useProgress } from "@/lib/progress";
 import { NeelaSays } from "../Neela";
 import { SpeakerButton } from "../SpeakerButton";
-import { ResultCard } from "./GameFrame";
-
-const SECONDS = 60;
+import { ResultCard, useDifficulty } from "./GameFrame";
 const PENALTY = 3;
 
 type Result = { score: number; xp: number; isBest: boolean; prevBest: number; built: number };
 
 export function BuilderGame({ pool }: { pool: Phrase[] }) {
-  const best = useProgress().highScores.builder ?? 0;
+  const { level, d } = useDifficulty();
+  const SECONDS = d.builderSeconds;
+  const best = useProgress().highScores[scoreKey("builder", level)] ?? 0;
   const [phase, setPhase] = useState<"ready" | "play" | "done">("ready");
-  const [round, setRound] = useState<BuildRound | null>(() => makeBuild(pool));
+  const [round, setRound] = useState<BuildRound | null>(() => makeBuild(pool, Math.random, undefined, d.builderMin, d.builderMax));
   const [picked, setPicked] = useState<number[]>([]);
   const [timeLeft, setTimeLeft] = useState(SECONDS);
   const [score, setScore] = useState(0);
@@ -40,10 +40,10 @@ export function BuilderGame({ pool }: { pool: Phrase[] }) {
     if (!over) return;
     const { score: s, built, best: prevBest } = live.current;
     const xp = gameXp(s);
-    const isBest = recordGame("builder", s, xp);
+    const isBest = recordGame(scoreKey("builder", level), s, xp);
     setResult({ score: s, xp, isBest, prevBest, built });
     setPhase("done");
-  }, [over]);
+  }, [over, level]);
 
   function start() {
     live.current = { score: 0, built: 0, best };
@@ -52,7 +52,7 @@ export function BuilderGame({ pool }: { pool: Phrase[] }) {
     setPicked([]);
     setSlips(0);
     setFlash(null);
-    setRound(makeBuild(pool));
+    setRound(makeBuild(pool, Math.random, undefined, d.builderMin, d.builderMax));
     setPhase("play");
   }
 
@@ -73,7 +73,7 @@ export function BuilderGame({ pool }: { pool: Phrase[] }) {
         setFlash(null);
         setPicked([]);
         setSlips(0);
-        setRound(makeBuild(pool, Math.random, round.phrase.id));
+        setRound(makeBuild(pool, Math.random, round.phrase.id, d.builderMin, d.builderMax));
       }, 500);
     } else {
       setFlash("bad");

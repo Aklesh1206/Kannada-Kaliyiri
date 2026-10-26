@@ -2,20 +2,20 @@
 
 import { useEffect, useState } from "react";
 import type { Phrase } from "@/lib/types";
-import { gameXp, makeQuestion } from "@/lib/games";
+import { gameXp, makeQuestion, scoreKey } from "@/lib/games";
 import type { Question } from "@/lib/games";
 import { playPhrase } from "@/lib/audio";
 import { recordGame, useProgress } from "@/lib/progress";
 import { NeelaSays } from "../Neela";
-import { ResultCard } from "./GameFrame";
-
-const LIVES = 3;
+import { ResultCard, useDifficulty } from "./GameFrame";
 type Result = { score: number; xp: number; isBest: boolean; prevBest: number };
 
 export function ListenGame({ pool }: { pool: Phrase[] }) {
-  const best = useProgress().highScores.listen ?? 0;
+  const { level, d } = useDifficulty();
+  const LIVES = d.listenLives;
+  const best = useProgress().highScores[scoreKey("listen", level)] ?? 0;
   const [started, setStarted] = useState(false);
-  const [question, setQuestion] = useState<Question>(() => makeQuestion(pool, 4));
+  const [question, setQuestion] = useState<Question>(() => makeQuestion(pool, d.listenOptions));
   const [score, setScore] = useState(0);
   const [streak, setStreak] = useState(0);
   const [lives, setLives] = useState(LIVES);
@@ -40,11 +40,11 @@ export function ListenGame({ pool }: { pool: Phrase[] }) {
       setReveal(null);
       if (nextLives <= 0) {
         const xp = gameXp(nextScore);
-        const isBest = recordGame("listen", nextScore, xp);
+        const isBest = recordGame(scoreKey("listen", level), nextScore, xp);
         setResult({ score: nextScore, xp, isBest, prevBest: best });
         return;
       }
-      setQuestion(makeQuestion(pool, 4, Math.random, phrase.id));
+      setQuestion(makeQuestion(pool, d.listenOptions, Math.random, phrase.id));
     }, right ? 900 : 1800);
   }
 
@@ -54,7 +54,7 @@ export function ListenGame({ pool }: { pool: Phrase[] }) {
     setLives(LIVES);
     setReveal(null);
     setResult(null);
-    setQuestion(makeQuestion(pool, 4));
+    setQuestion(makeQuestion(pool, d.listenOptions));
   }
 
   if (!started) {
@@ -117,7 +117,7 @@ export function ListenGame({ pool }: { pool: Phrase[] }) {
         {reveal && (
           <div className="text-center" aria-live="polite">
             <p className="kn text-3xl font-bold">{phrase.kn}</p>
-            <p className="text-ink-soft">{phrase.tr}</p>
+            {d.showRoman && <p className="text-ink-soft">{phrase.tr}</p>}
           </div>
         )}
       </div>

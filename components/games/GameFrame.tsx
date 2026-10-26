@@ -4,14 +4,22 @@ import Link from "next/link";
 import { useMemo } from "react";
 import type { ReactNode } from "react";
 import { unitsForLevel } from "@/lib/content";
-import { pickPool } from "@/lib/games";
+import { DIFFICULTY, pickPool } from "@/lib/games";
+import type { Difficulty } from "@/lib/games";
 import { useHydrated, useProgress } from "@/lib/progress";
-import type { Phrase } from "@/lib/types";
+import type { Level, Phrase } from "@/lib/types";
+import { LevelPills } from "../LevelPills";
 
 /** Phrases for the learner's level, drawn mostly from lessons they have finished. */
 export function useGamePool(): Phrase[] {
   const p = useProgress();
   return useMemo(() => pickPool(unitsForLevel(p.level ?? "beginner"), p.completed), [p.level, p.completed]);
+}
+
+/** The learner's level and the game rules for it. */
+export function useDifficulty(): { level: Level; d: Difficulty } {
+  const level = useProgress().level ?? "beginner";
+  return { level, d: DIFFICULTY[level] };
 }
 
 /** Page chrome for a game: back arrow and title. */
@@ -28,6 +36,9 @@ export function GameShell({ title, children }: { title: string; children: ReactN
         </Link>
         <h1 className="text-2xl font-extrabold">{title}</h1>
       </header>
+      <div className="mb-5">
+        <LevelPills />
+      </div>
       {children}
     </div>
   );
@@ -44,7 +55,13 @@ export function GameFrame({ title, children }: { title: string; children: (pool:
 
 function Inner({ children }: { children: (pool: Phrase[]) => ReactNode }) {
   const pool = useGamePool();
-  return <main className="flex flex-1 flex-col gap-6">{children(pool)}</main>;
+  const level = useProgress().level ?? "beginner";
+  // Changing level restarts the game with that level's phrases and rules
+  return (
+    <main key={level} className="flex flex-1 flex-col gap-6">
+      {children(pool)}
+    </main>
+  );
 }
 
 export function ResultCard({

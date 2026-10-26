@@ -2,21 +2,21 @@
 
 import { useRef, useState } from "react";
 import type { Phrase } from "@/lib/types";
-import { makeDeck, memoryScore, gameXp } from "@/lib/games";
+import { makeDeck, memoryScore, gameXp, scoreKey } from "@/lib/games";
 import { recordGame, useProgress } from "@/lib/progress";
 import { NeelaSays } from "../Neela";
-import { ResultCard } from "./GameFrame";
-
-const PAIRS = 6;
+import { ResultCard, useDifficulty } from "./GameFrame";
 
 export function MemoryGame({ pool }: { pool: Phrase[] }) {
-  const best = useProgress().highScores.memory ?? 0;
+  const { level } = useDifficulty();
+  const best = useProgress().highScores[scoreKey("memory", level)] ?? 0;
   const [round, setRound] = useState(0);
   return <Board key={round} pool={pool} best={best} onAgain={() => setRound((r) => r + 1)} />;
 }
 
 function Board({ pool, best, onAgain }: { pool: Phrase[]; best: number; onAgain: () => void }) {
-  const [cards] = useState(() => makeDeck(pool, PAIRS));
+  const { level, d } = useDifficulty();
+  const [cards] = useState(() => makeDeck(pool, d.memoryPairs));
   const [open, setOpen] = useState<number[]>([]);
   const [matched, setMatched] = useState<string[]>([]);
   const [moves, setMoves] = useState(0);
@@ -45,7 +45,7 @@ function Board({ pool, best, onAgain }: { pool: Phrase[]; best: number; onAgain:
         const score = memoryScore(pairs, nextMoves);
         const xp = gameXp(score);
         const prevBest = best;
-        setResult({ score, xp, isBest: recordGame("memory", score, xp), prevBest });
+        setResult({ score, xp, isBest: recordGame(scoreKey("memory", level), score, xp), prevBest });
       }
     }, isMatch ? 450 : 900);
   }
@@ -83,7 +83,7 @@ function Board({ pool, best, onAgain }: { pool: Phrase[]; best: number; onAgain:
               key={c.key}
               type="button"
               onClick={() => flip(i)}
-              aria-label={isOpen ? `${c.text}${c.sub ? `, ${c.sub}` : ""}` : "Hidden card"}
+              aria-label={isOpen ? `${c.text}${c.sub && d.showRoman ? `, ${c.sub}` : ""}` : "Hidden card"}
               className={`press flex min-h-28 flex-col items-center justify-center rounded-2xl border-2 p-2 text-center ${
                 done
                   ? "border-good bg-good-wash"
@@ -95,7 +95,7 @@ function Board({ pool, best, onAgain }: { pool: Phrase[]; best: number; onAgain:
               {isOpen ? (
                 <>
                   <span className={`font-bold ${c.side === "kn" ? "kn text-xl" : "text-base"}`}>{c.text}</span>
-                  {c.sub && <span className="text-sm text-ink-soft">{c.sub}</span>}
+                  {c.sub && d.showRoman && <span className="text-sm text-ink-soft">{c.sub}</span>}
                 </>
               ) : (
                 <span className="text-3xl" aria-hidden="true">

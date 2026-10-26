@@ -2,16 +2,17 @@
 
 import Link from "next/link";
 import { quests } from "@/lib/content";
-import { GAMES } from "@/lib/games";
+import { GAMES, scoreKey } from "@/lib/games";
 import { useHydrated, useProgress } from "@/lib/progress";
 import { NeelaSays } from "../Neela";
-import { useGamePool } from "./GameFrame";
+import { LevelPills } from "../LevelPills";
+import { useDifficulty, useGamePool } from "./GameFrame";
 
 export function GamesHub() {
   const p = useProgress();
   const hydrated = useHydrated();
   const pool = useGamePool();
-  const level = hydrated ? (p.level ?? "beginner") : "beginner";
+  const { level, d } = useDifficulty();
 
   return (
     <div className="mx-auto w-full max-w-2xl px-4 pb-24">
@@ -26,8 +27,9 @@ export function GamesHub() {
         <h1 className="text-2xl font-extrabold">Games</h1>
       </header>
       <main className="flex flex-col gap-5">
+        <LevelPills />
         <NeelaSays mood="happy">
-          Play with {hydrated ? pool.length : "your"} {level} phrases. Games earn XP and keep your streak alive.
+          {d.summary} You are playing with {hydrated ? pool.length : "your"} {level} phrases.
         </NeelaSays>
         <h2 className="text-xl font-extrabold">Quick games</h2>
         {GAMES.map((g) => (
@@ -45,7 +47,7 @@ export function GamesHub() {
             </span>
             <span className="text-right text-sm font-semibold text-ink-soft">
               Best
-              <span className="block text-xl font-extrabold text-ink">{hydrated ? (p.highScores[g.id] ?? 0) : 0}</span>
+              <span className="block text-xl font-extrabold text-ink">{hydrated ? (p.highScores[scoreKey(g.id, level)] ?? 0) : 0}</span>
             </span>
           </Link>
         ))}
@@ -65,7 +67,7 @@ export function GamesHub() {
             </span>
             <span className="text-right text-sm font-semibold text-ink-soft">
               Best
-              <span className="block text-xl font-extrabold text-ink">{hydrated ? (p.highScores[`quest:${q.id}`] ?? 0) : 0}</span>
+              <span className="block text-xl font-extrabold text-ink">{hydrated ? (p.highScores[scoreKey(`quest:${q.id}`, level)] ?? 0) : 0}</span>
             </span>
           </Link>
         ))}

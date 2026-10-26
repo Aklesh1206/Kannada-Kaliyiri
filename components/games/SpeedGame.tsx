@@ -2,21 +2,21 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { Phrase } from "@/lib/types";
-import { gameXp, makeQuestion, speedPoints } from "@/lib/games";
+import { gameXp, makeQuestion, scoreKey, speedPoints } from "@/lib/games";
 import type { Question } from "@/lib/games";
 import { recordGame, useProgress } from "@/lib/progress";
 import { NeelaSays } from "../Neela";
-import { ResultCard } from "./GameFrame";
-
-const SECONDS = 45;
+import { ResultCard, useDifficulty } from "./GameFrame";
 const PENALTY = 3;
 
 type Result = { score: number; xp: number; isBest: boolean; prevBest: number; right: number };
 
 export function SpeedGame({ pool }: { pool: Phrase[] }) {
-  const best = useProgress().highScores.speed ?? 0;
+  const { level, d } = useDifficulty();
+  const SECONDS = d.speedSeconds;
+  const best = useProgress().highScores[scoreKey("speed", level)] ?? 0;
   const [phase, setPhase] = useState<"ready" | "play" | "done">("ready");
-  const [question, setQuestion] = useState<Question>(() => makeQuestion(pool, 4));
+  const [question, setQuestion] = useState<Question>(() => makeQuestion(pool, d.speedOptions));
   const [timeLeft, setTimeLeft] = useState(SECONDS);
   const [score, setScore] = useState(0);
   const [combo, setCombo] = useState(0);
@@ -38,11 +38,11 @@ export function SpeedGame({ pool }: { pool: Phrase[] }) {
     if (!over) return;
     const { score: s, right: r, best: prevBest } = live.current;
     const xp = gameXp(s);
-    const isBest = recordGame("speed", s, xp);
+    const isBest = recordGame(scoreKey("speed", level), s, xp);
     // Finishing is a one-time event, so the result is stored once when time runs out
     setResult({ score: s, xp, isBest, prevBest, right: r });
     setPhase("done");
-  }, [over]);
+  }, [over, level]);
 
   function start() {
     live.current = { score: 0, right: 0, best };
@@ -50,7 +50,7 @@ export function SpeedGame({ pool }: { pool: Phrase[] }) {
     setCombo(0);
     setTimeLeft(SECONDS);
     setFlash(null);
-    setQuestion(makeQuestion(pool, 4));
+    setQuestion(makeQuestion(pool, d.speedOptions));
     setPhase("play");
   }
 
@@ -68,7 +68,7 @@ export function SpeedGame({ pool }: { pool: Phrase[] }) {
       setTimeLeft((t) => Math.max(0, t - PENALTY));
       setFlash("bad");
     }
-    setQuestion(makeQuestion(pool, 4, Math.random, question.phrase.id));
+    setQuestion(makeQuestion(pool, d.speedOptions, Math.random, question.phrase.id));
   }
 
   useEffect(() => {
@@ -135,7 +135,7 @@ export function SpeedGame({ pool }: { pool: Phrase[] }) {
         }`}
       >
         <p className="kn text-4xl font-bold">{question.phrase.kn}</p>
-        <p className="text-lg text-ink-soft">{question.phrase.tr}</p>
+        {d.showRoman && <p className="text-lg text-ink-soft">{question.phrase.tr}</p>}
       </div>
       <div className="grid gap-3 sm:grid-cols-2">
         {question.options.map((o, i) => (

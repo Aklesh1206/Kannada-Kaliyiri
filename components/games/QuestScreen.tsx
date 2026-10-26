@@ -2,12 +2,12 @@
 
 import { useRef, useState } from "react";
 import { getPhrase } from "@/lib/content";
-import { gameXp, questOptions, questScore, questStars } from "@/lib/games";
+import { gameXp, questOptions, questScore, questStars, scoreKey } from "@/lib/games";
 import { recordGame, useHydrated, useProgress } from "@/lib/progress";
 import type { Phrase, Quest } from "@/lib/types";
 import { NeelaSays } from "../Neela";
 import { SpeakerButton } from "../SpeakerButton";
-import { GameShell, ResultCard } from "./GameFrame";
+import { GameShell, ResultCard, useDifficulty } from "./GameFrame";
 
 export function QuestScreen({ quest }: { quest: Quest }) {
   const hydrated = useHydrated();
@@ -19,15 +19,18 @@ export function QuestScreen({ quest }: { quest: Quest }) {
 }
 
 function Quest_({ quest }: { quest: Quest }) {
-  const key = `quest:${quest.id}`;
+  const { level } = useDifficulty();
+  const key = scoreKey(`quest:${quest.id}`, level);
   const best = useProgress().highScores[key] ?? 0;
   const [round, setRound] = useState(0);
-  return <Run key={round} quest={quest} gameKey={key} best={best} onAgain={() => setRound((r) => r + 1)} />;
+  // A new level starts the story again with that level's rules
+  return <Run key={`${round}-${level}`} quest={quest} gameKey={key} best={best} onAgain={() => setRound((r) => r + 1)} />;
 }
 
 type Outcome = { score: number; stars: number; xp: number; isBest: boolean; prevBest: number };
 
 function Run({ quest, gameKey, best, onAgain }: { quest: Quest; gameKey: string; best: number; onAgain: () => void }) {
+  const { d } = useDifficulty();
   const [started, setStarted] = useState(false);
   const [step, setStep] = useState(0);
   const [mistakes, setMistakes] = useState(0);
@@ -45,7 +48,7 @@ function Run({ quest, gameKey, best, onAgain }: { quest: Quest; gameKey: string;
     }
     return map;
   });
-  const [optionSets] = useState(() => quest.steps.map((s) => questOptions(s, byId)));
+  const [optionSets] = useState(() => quest.steps.map((s) => questOptions(s, byId, Math.random, d.questOptions)));
 
   const total = quest.steps.length;
   const current = quest.steps[step];
@@ -151,7 +154,7 @@ function Run({ quest, gameKey, best, onAgain }: { quest: Quest; gameKey: string;
             const isSolved = solved?.id === o.id;
             return (
               <div key={o.id} className="flex items-center gap-3">
-                <SpeakerButton phraseId={o.id} kn={o.kn} label={`Hear ${o.tr}`} />
+                <SpeakerButton phraseId={o.id} kn={o.kn} label={d.showRoman ? `Hear ${o.tr}` : "Hear this phrase"} />
                 <button
                   type="button"
                   disabled={isWrong || Boolean(solved)}
@@ -165,7 +168,7 @@ function Run({ quest, gameKey, best, onAgain }: { quest: Quest; gameKey: string;
                   }`}
                 >
                   <span className="kn block text-2xl font-bold">{o.kn}</span>
-                  <span className="block text-base text-ink-soft">{o.tr}</span>
+                  {d.showRoman && <span className="block text-base text-ink-soft">{o.tr}</span>}
                 </button>
               </div>
             );

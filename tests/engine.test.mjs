@@ -118,7 +118,7 @@ test("tokenize drops punctuation", () => {
   assert.deepEqual(tokenize("nimma hesaru enu?"), ["nimma", "hesaru", "enu"]);
 });
 
-import { pickPool, makeDeck, makeQuestion, memoryScore, speedPoints, gameXp, fallSeconds, makeBuild, orderCorrect, trTokens, questOptions, questProblems, questScore, questStars } from "../lib/games.ts";
+import { pickPool, makeDeck, makeQuestion, memoryScore, speedPoints, gameXp, fallSeconds, makeBuild, orderCorrect, trTokens, questOptions, questProblems, questScore, questStars, DIFFICULTY, scoreKey } from "../lib/games.ts";
 
 const quests = JSON.parse(readFileSync(new URL("../content/quests.json", import.meta.url), "utf8"));
 
@@ -196,4 +196,28 @@ test("quests: content points at real phrases and every step is answerable", () =
   assert.equal(questStars(0), 3);
   assert.equal(questStars(3), 2);
   assert.equal(questStars(9), 1);
+});
+
+test("games: difficulty gets harder with each level", () => {
+  const [b, i, a] = ["beginner", "intermediate", "advanced"].map((l) => DIFFICULTY[l]);
+  assert.ok(b.memoryPairs < i.memoryPairs && i.memoryPairs < a.memoryPairs);
+  assert.ok(b.speedSeconds > i.speedSeconds && i.speedSeconds > a.speedSeconds);
+  assert.ok(b.speedOptions < a.speedOptions && b.listenOptions < a.listenOptions);
+  assert.ok(b.fallBase > a.fallBase && b.fallFloor > a.fallFloor);
+  assert.ok(b.listenLives > a.listenLives);
+  assert.ok(b.showRoman && !a.showRoman);
+  assert.equal(scoreKey("speed", "advanced"), "speed:advanced");
+});
+
+test("games: builder honours the word range, and quests honour the option count", () => {
+  const pool = units.flatMap((u) => u.phrases);
+  for (let seed = 1; seed <= 25; seed++) {
+    const r = makeBuild(pool, seeded(seed), undefined, 3, 7);
+    assert.ok(r.answer.length >= 3 && r.answer.length <= 7);
+  }
+  const byId = Object.fromEntries(pool.map((p) => [p.id, p]));
+  const step = quests[0].steps[0];
+  assert.equal(questOptions(step, byId, seeded(2), 3).length, 3);
+  assert.ok(questOptions(step, byId, seeded(2), 3).some((o) => o.id === step.answer));
+  assert.equal(questOptions(step, byId, seeded(2)).length, 4);
 });
