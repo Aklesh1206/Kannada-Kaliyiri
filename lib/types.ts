@@ -64,4 +64,6 @@ export type Exercise =
   | { kind: "choose"; mode: ChooseMode; phraseId: string; options: Option[] }
   | { kind: "match"; pairs: { id: string; tr: string; en: string }[] }
   | { kind: "order"; phraseId: string; tokens: string[]; answer: string[] }
-  | { kind: "type"; phraseId: string };
+  | { kind: "type"; phraseId: string }
+  /** Optional bonus: say the phrase out loud. Never costs a heart */
+  | { kind: "speak"; phraseId: string };

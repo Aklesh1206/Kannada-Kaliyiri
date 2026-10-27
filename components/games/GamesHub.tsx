@@ -31,6 +31,9 @@ export function GamesHub() {
         <NeelaSays mood="happy">
           {d.summary} You are playing with {hydrated ? pool.length : "your"} {level} phrases.
         </NeelaSays>
+        <Link href="/leaderboard" className="self-start text-base font-bold text-arishina-deep underline">
+          See the leaderboard
+        </Link>
         <h2 className="text-xl font-extrabold">Quick games</h2>
         {GAMES.map((g) => (
           <Link

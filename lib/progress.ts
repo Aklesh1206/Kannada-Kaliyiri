@@ -21,6 +21,8 @@ export type Progress = {
   highScores: Record<string, number>;
   /** What Neela calls the learner; empty if they skipped */
   name: string;
+  /** Show this learner on the public leaderboard */
+  leaderboard: boolean;
 };
 
 export const MAX_HEARTS = 5;
@@ -40,6 +42,7 @@ const EMPTY: Progress = {
   level: null,
   highScores: {},
   name: "",
+  leaderboard: true,
 };
 
 function dayString(d: Date) {
@@ -130,6 +133,20 @@ export function recordGame(game: string, score: number, xp: number): boolean {
     commit({ ...p, highScores: { ...p.highScores, [game]: score } });
   }
   return isBest;
+}
+
+/** Current progress outside React, for the cloud sync. */
+export function getProgress(): Progress {
+  return snapshot();
+}
+
+/** Replaces progress with merged data after signing in. */
+export function replaceProgress(next: Progress) {
+  commit(next);
+}
+
+export function setLeaderboard(show: boolean) {
+  commit({ ...snapshot(), leaderboard: show });
 }
 
 export function setName(name: string) {

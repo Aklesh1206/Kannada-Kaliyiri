@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { HomePath } from "@/components/HomePath";
 import { StatBar } from "@/components/StatBar";
 
@@ -8,7 +9,12 @@ export default function Home() {
         <p className="text-xl font-extrabold">
           Kannada Kaliyiri
         </p>
-        <StatBar />
+        <div className="flex items-center gap-4">
+          <Link href="/account" className="rounded-xl px-2 py-1 text-base font-bold text-ink-soft hover:bg-line/60">
+            Account
+          </Link>
+          <StatBar />
+        </div>
       </header>
       <main>
         <HomePath />

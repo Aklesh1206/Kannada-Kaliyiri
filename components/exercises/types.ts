@@ -7,6 +7,10 @@ export type Answer = {
   reveal?: string;
   /** Per-phrase result, for exercises that test several phrases (matching) */
   phraseResults?: Record<string, boolean>;
+  /** Speaking practice only: the learner has had a go, so the button changes from Skip to Continue */
+  attempted?: boolean;
+  /** Speaking practice only: bonus XP for sounding right */
+  xp?: number;
 };
 
 export type ExerciseProps<E> = {

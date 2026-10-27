@@ -221,3 +221,66 @@ test("games: builder honours the word range, and quests honour the option count"
   assert.ok(questOptions(step, byId, seeded(2), 3).some((o) => o.id === step.answer));
   assert.equal(questOptions(step, byId, seeded(2)).length, 4);
 });
+
+import { scoreSpeech, normalizeKn, similarity } from "../lib/check.ts";
+
+test("speech: scoreSpeech grades what was heard against the phrase", () => {
+  const p = { kn: "ನಮಸ್ಕಾರ", tr: "namaskara" };
+  assert.equal(scoreSpeech(["ನಮಸ್ಕಾರ"], p).verdict, "great");
+  assert.equal(scoreSpeech(["xyz", "ನಮಸ್ಕಾರ"], p).verdict, "great"); // best guess counts
+  assert.equal(scoreSpeech(["namaskara"], p).verdict, "great"); // Roman letters compare with the Roman spelling
+  assert.equal(scoreSpeech(["ಧನ್ಯವಾದ"], p).verdict, "retry");
+  assert.equal(scoreSpeech([], p).verdict, "retry");
+  assert.equal(normalizeKn(" ನಮ ಸ್ಕಾರ! "), "ನಮಸ್ಕಾರ");
+  assert.equal(similarity(["a"], ["a"]), 1);
+});
+
+test("speech: buildLesson adds speaking practice last, only when asked", () => {
+  const u = units[0];
+  const phrases = u.phrases.slice(0, 5);
+  for (const speak of [false, true]) {
+    const q = buildLesson(phrases, u.phrases, seeded(5), { speak });
+    const speaking = q.filter((e) => e.kind === "speak");
+    assert.equal(speaking.length, speak ? 2 : 0);
+    assert.ok(q.slice(q.length - speaking.length).every((e) => e.kind === "speak"));
+  }
+});
+
+import { mergeProgress, toRows, fromRows } from "../lib/merge.ts";
+
+const base = { xp: 0, streak: 0, lastActive: null, completed: {}, boxes: {}, highScores: {}, level: null, name: "", leaderboard: true };
+
+test("cloud merge: nothing is lost when two devices are combined", () => {
+  const local = { ...base, xp: 50, streak: 2, lastActive: "2026-10-26", level: "beginner", name: "Aklesh",
+    completed: { "greetings/say-hello": 1 }, boxes: { a: { box: 2, due: "2026-10-27" } }, highScores: { "speed:beginner": 120 } };
+  const remote = { ...base, xp: 80, streak: 5, lastActive: "2026-10-20", level: "advanced", name: "Other",
+    completed: { "greetings/say-hello": 3, "auto/get-an-auto": 1 }, boxes: { a: { box: 4, due: "2026-11-01" }, b: { box: 1, due: "2026-10-22" } },
+    highScores: { "speed:beginner": 90, "catch:beginner": 40 } };
+  const m = mergeProgress(local, remote);
+  assert.equal(m.xp, 80);
+  assert.equal(m.streak, 2); // local was active more recently
+  assert.deepEqual(m.completed, { "greetings/say-hello": 3, "auto/get-an-auto": 1 });
+  assert.equal(m.boxes.a.box, 4);
+  assert.ok(m.boxes.b);
+  assert.equal(m.highScores["speed:beginner"], 120);
+  assert.equal(m.highScores["catch:beginner"], 40);
+  assert.equal(m.level, "beginner");
+  assert.equal(m.name, "Aklesh");
+  assert.equal(mergeProgress(local, null), local);
+  assert.equal(mergeProgress({ ...local, leaderboard: true }, { ...remote, leaderboard: false }).leaderboard, false);
+  assert.equal(mergeProgress({ ...base }, remote).level, "advanced");
+});
+
+test("cloud rows: progress survives a round trip", () => {
+  const p = { ...base, xp: 12, streak: 3, lastActive: "2026-10-26", level: "intermediate", name: "  Aklesh  ",
+    completed: { "x/y": 2 }, boxes: { p1: { box: 9, due: "2026-11-01" } }, highScores: { "memory:advanced": 500 } };
+  const rows = toRows("u1", p);
+  assert.equal(rows.profile.display_name, "Aklesh");
+  assert.equal(rows.boxes[0].box, 5); // clamped to the table's 1..5 rule
+  const back = fromRows({ profile: rows.profile, lessons: rows.lessons, boxes: rows.boxes, scores: rows.scores });
+  assert.equal(back.level, "intermediate");
+  assert.deepEqual(back.completed, { "x/y": 2 });
+  assert.deepEqual(back.highScores, { "memory:advanced": 500 });
+  assert.equal(toRows("u1", { ...p, level: "expert" }).profile.level, null);
+  assert.equal(fromRows({ profile: null, lessons: [], boxes: [], scores: [] }), null);
+});

@@ -19,7 +19,7 @@ export function normalizeTr(s: string): string {
     .trim();
 }
 
-export function editDistance(a: string, b: string): number {
+export function editDistance(a: ArrayLike<string>, b: ArrayLike<string>): number {
   const dp: number[] = Array.from({ length: b.length + 1 }, (_, j) => j);
   for (let i = 1; i <= a.length; i++) {
     let prev = dp[0];
@@ -47,4 +47,53 @@ export function checkTransliteration(
   const best = Math.min(...targets.map((t) => editDistance(guess, t)));
   const longest = Math.max(...targets.map((t) => t.length));
   return best <= 1 && longest >= 6 ? "close" : "wrong";
+}
+
+// ---------- Speech ----------
+
+const KANNADA = /[ಀ-೿]/;
+
+/** Strips spaces, punctuation and invisible joiners so only the letters are compared. */
+export function normalizeKn(s: string): string {
+  return s
+    .normalize("NFC")
+    .replace(/[​-‍﻿]/g, "")
+    .replace(/[?!.,;:"'()\-–—‘’“”।॥]/g, "")
+    .replace(/\s+/g, "")
+    .toLowerCase();
+}
+
+/** 1 means identical, 0 means nothing in common. Compares letters, not bytes. */
+export function similarity(a: ArrayLike<string>, b: ArrayLike<string>): number {
+  const longest = Math.max(a.length, b.length);
+  if (longest === 0) return 1;
+  return 1 - editDistance(a, b) / longest;
+}
+
+export type SpeechVerdict = "great" | "close" | "retry";
+
+/**
+ * Judges what the speech recogniser heard against the phrase. The recogniser may return several
+ * guesses, so the best one counts. Kannada script is compared with the Kannada text; if it returned
+ * English letters instead, those are compared with the Roman spelling.
+ */
+export function scoreSpeech(
+  heard: string[],
+  target: { kn: string; tr: string },
+): { verdict: SpeechVerdict; score: number; best: string } {
+  const knTarget = Array.from(normalizeKn(target.kn));
+  const trTarget = Array.from(normalizeTr(target.tr));
+  let score = 0;
+  let best = heard[0] ?? "";
+  for (const h of heard) {
+    const s = KANNADA.test(h)
+      ? similarity(Array.from(normalizeKn(h)), knTarget)
+      : similarity(Array.from(normalizeTr(h)), trTarget);
+    if (s > score) {
+      score = s;
+      best = h;
+    }
+  }
+  const verdict: SpeechVerdict = score >= 0.85 ? "great" : score >= 0.6 ? "close" : "retry";
+  return { verdict, score, best };
 }

@@ -52,7 +52,17 @@ export function exercisePhraseIds(ex: Exercise): string[] {
  * intro cards first, then multiple choice and matching, then word order and typing.
  * `pool` supplies wrong answers, so pass every phrase in the unit.
  */
-export function buildLesson(phrases: Phrase[], pool: Phrase[], rng: Rng = Math.random): Exercise[] {
+export type BuildOptions = {
+  /** Add optional say-it-aloud exercises. Only turn on when the browser has speech recognition */
+  speak?: boolean;
+};
+
+export function buildLesson(
+  phrases: Phrase[],
+  pool: Phrase[],
+  rng: Rng = Math.random,
+  options: BuildOptions = {},
+): Exercise[] {
   const modes: ChooseMode[] = ["kn-to-en", "en-to-tr", "listen-to-en"];
 
   const intros: Exercise[] = phrases.map((p) => ({ kind: "intro", phraseId: p.id }));
@@ -84,5 +94,11 @@ export function buildLesson(phrases: Phrase[], pool: Phrase[], rng: Rng = Math.r
     hard.push({ kind: "type", phraseId: p.id });
   }
 
-  return [...intros, ...shuffle(middle, rng), ...hard];
+  const speak: Exercise[] = options.speak
+    ? shuffle(phrases, rng)
+        .slice(0, 2)
+        .map((p) => ({ kind: "speak", phraseId: p.id }))
+    : [];
+
+  return [...intros, ...shuffle(middle, rng), ...hard, ...speak];
 }

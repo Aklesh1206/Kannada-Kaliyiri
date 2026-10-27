@@ -16,7 +16,7 @@ No account, database or API key is needed. Progress (XP, streak, hearts, review 
 
 ## Add audio (do this once, needs internet)
 
-The speaker buttons play `public/audio/<phrase id>.mp3`. Until those files exist, the app falls back to the browser's own Kannada voice, which only works on some devices.
+The speaker buttons play `public/audio/<phrase id>.mp3`. Until those files exist, they use an online Kannada voice (needs internet), then the browser's own Kannada voice (only some devices have one). For reliable, offline sound, make the mp3 files once:
 
 ```
 pip install edge-tts
@@ -24,6 +24,10 @@ python scripts/generate_audio.py
 ```
 
 Run it again whenever you add phrases. Existing files are skipped. Use `--voice kn-IN-GaganNeural` for a male voice.
+
+## Speaking practice
+
+Every lesson ends with up to two "Say it out loud" cards when the browser supports speech recognition (Chrome or Edge, needs internet). Tap the mic and say the phrase. It never costs a heart, can always be skipped, and earns 3 bonus XP for a good match.
 
 ## Add lessons
 
@@ -65,3 +69,9 @@ npm run build
 - Roleplay chat where an LLM plays the auto driver or shopkeeper (add an API route, keep the key server-side).
 - A "speak this phrase" mode for pronunciation practice.
 - Sync progress to a database so it follows the learner across devices.
+
+## Cloud save and leaderboard (optional)
+
+Progress is stored in the browser by default. To add sign-in, sync across devices and a per-level leaderboard,
+follow [`supabase/SETUP.md`](supabase/SETUP.md). The app works exactly as before when the two Supabase
+environment variables are not set.

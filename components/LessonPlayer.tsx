@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Exercise, Phrase } from "@/lib/types";
 import { buildLesson, exercisePhraseIds } from "@/lib/exercises";
 import { completeLesson, loseHeart, recordAnswer, useHydrated, useProgress } from "@/lib/progress";
@@ -12,6 +12,8 @@ import { ChooseExercise } from "./exercises/Choose";
 import { MatchExercise } from "./exercises/Match";
 import { OrderExercise } from "./exercises/Order";
 import { TypeExercise } from "./exercises/TypeIt";
+import { Speak } from "./exercises/Speak";
+import { speechSupported } from "@/lib/speech";
 import type { Answer } from "./exercises/types";
 
 const CHEERS = ["ಶಭಾಷ್!", "ಚೆನ್ನಾಗಿದೆ!", "ಸೂಪರ್!", "Well done!", "Neela is impressed!"];
@@ -38,8 +40,13 @@ function Player({ title, lessonKey, phrases, pool, backHref }: Props) {
   const progress = useProgress();
   const byId = useMemo(() => Object.fromEntries(pool.map((p) => [p.id, p])), [pool]);
 
-  const [queue, setQueue] = useState<Exercise[]>(() => buildLesson(phrases, pool));
-  const [graded] = useState(() => queue.filter((e) => e.kind !== "intro").length);
+  // Speaking practice is only offered when this browser can recognise speech
+  const [queue, setQueue] = useState<Exercise[]>(() =>
+    buildLesson(phrases, pool, Math.random, { speak: speechSupported() }),
+  );
+  // Intro cards and speaking practice are not graded, so they never count towards accuracy
+  const [graded] = useState(() => queue.filter((e) => e.kind !== "intro" && e.kind !== "speak").length);
+  const bonusXp = useRef(0);
   const [index, setIndex] = useState(0);
   const [answer, setAnswer] = useState<Answer | null>(null);
   const [checked, setChecked] = useState(false);
@@ -47,15 +54,17 @@ function Player({ title, lessonKey, phrases, pool, backHref }: Props) {
   const [finished, setFinished] = useState<{ xp: number; accuracy: number } | null>(null);
 
   const exercise = queue[index];
-  const isIntro = exercise?.kind === "intro";
+  // Intro cards and speaking practice move on without a Check step
+  const isFree = exercise?.kind === "intro" || exercise?.kind === "speak";
   const outOfHearts = progress.hearts === 0 && !finished;
 
   const markIntroReady = useCallback(() => setAnswer({ correct: true }), []);
 
   const next = useCallback(() => {
+    if (exercise?.kind === "speak" && answer?.xp) bonusXp.current += answer.xp;
     if (index + 1 >= queue.length) {
       const right = Math.max(0, graded - wrongCount);
-      const xp = 10 + right;
+      const xp = 10 + right + bonusXp.current;
       completeLesson(lessonKey, xp);
       setFinished({ xp, accuracy: graded ? Math.round((right / graded) * 100) : 100 });
       return;
@@ -63,11 +72,11 @@ function Player({ title, lessonKey, phrases, pool, backHref }: Props) {
     setIndex(index + 1);
     setAnswer(null);
     setChecked(false);
-  }, [index, queue.length, graded, wrongCount, lessonKey]);
+  }, [exercise, answer, index, queue.length, graded, wrongCount, lessonKey]);
 
   const check = useCallback(() => {
     if (!answer || !exercise) return;
-    if (isIntro) return next();
+    if (isFree) return next();
     setChecked(true);
     for (const id of exercisePhraseIds(exercise)) {
       recordAnswer(id, answer.phraseResults ? (answer.phraseResults[id] ?? true) : answer.correct);
@@ -78,10 +87,20 @@ function Player({ title, lessonKey, phrases, pool, backHref }: Props) {
       // Mistakes come back at the end, so every exercise is eventually answered correctly
       setQueue((q) => [...q, exercise]);
     }
-  }, [answer, exercise, isIntro, next]);
+  }, [answer, exercise, isFree, next]);
 
-  const primary = checked || isIntro ? next : check;
-  const primaryEnabled = isIntro ? Boolean(answer) : checked || Boolean(answer);
+  const primary = checked || isFree ? next : check;
+  const primaryEnabled = isFree ? Boolean(answer) : checked || Boolean(answer);
+  const primaryLabel =
+    exercise?.kind === "intro"
+      ? "Got it"
+      : exercise?.kind === "speak"
+        ? answer?.attempted
+          ? "Continue"
+          : "Skip"
+        : checked
+          ? "Continue"
+          : "Check";
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -179,6 +198,7 @@ function Player({ title, lessonKey, phrases, pool, backHref }: Props) {
         {exercise.kind === "order" && (
           <OrderExercise exercise={exercise} phrase={phrase} phrases={byId} locked={lockedOut} onAnswer={setAnswer} />
         )}
+        {exercise.kind === "speak" && <Speak phrase={phrase} onAnswer={setAnswer} />}
         {exercise.kind === "type" && (
           <TypeExercise exercise={exercise} phrase={phrase} phrases={byId} locked={lockedOut} onAnswer={setAnswer} />
         )}
@@ -213,7 +233,7 @@ function Player({ title, lessonKey, phrases, pool, backHref }: Props) {
             onClick={primary}
             className={bigButton(checked ? (answer?.correct ? "good" : "bad") : "neutral")}
           >
-            {isIntro ? "Got it" : checked ? "Continue" : "Check"}
+            {primaryLabel}
           </button>
         </div>
       </Footer>
