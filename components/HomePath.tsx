@@ -74,6 +74,19 @@ export function HomePath() {
       {level && <LevelMeter />}
 
       <Link
+        href="/talk"
+        className="press flex items-center justify-between gap-4 rounded-2xl border-2 border-kumkuma bg-kumkuma-wash px-5 py-4 shadow-[0_4px_0_0_var(--kumkuma)]"
+      >
+        <span>
+          <span className="block text-xl font-bold">Talk with Neela</span>
+          <span className="block text-base text-ink-soft">Speak Kannada and get word-by-word pronunciation tips</span>
+        </span>
+        <span className="text-3xl" aria-hidden="true">
+          🎤
+        </span>
+      </Link>
+
+      <Link
         href="/games"
         className="press flex items-center justify-between gap-4 rounded-2xl border-2 border-arishina-deep bg-arishina-wash px-5 py-4 shadow-[0_4px_0_0_var(--arishina-deep)]"
       >

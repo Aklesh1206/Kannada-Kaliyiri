@@ -66,12 +66,62 @@ npm run build
 
 ## Next steps
 
-- Roleplay chat where an LLM plays the auto driver or shopkeeper (add an API route, keep the key server-side).
-- A "speak this phrase" mode for pronunciation practice.
-- Sync progress to a database so it follows the learner across devices.
+- More chat scenarios (market, restaurant, directions).
+- Per-sound pronunciation drills based on the slips Neela hears most often.
 
 ## Cloud save and leaderboard (optional)
 
 Progress is stored in the browser by default. To add sign-in, sync across devices and a per-level leaderboard,
 follow [`supabase/SETUP.md`](supabase/SETUP.md). The app works exactly as before when the two Supabase
 environment variables are not set.
+
+## Audio
+
+Speaker buttons play `public/audio/<phrase id>.mp3`. Make the files once, then commit them so the deployed site has them:
+
+- **On GitHub (no setup):** Actions > "Generate audio" > Run workflow. It commits the files for you.
+- **On your computer:** `pip install edge-tts`, then `python scripts/generate_audio.py`, then commit `public/audio`.
+
+Without the files the app falls back to an online voice and then to the browser's own Kannada voice. Microsoft Edge has one; Chrome on Windows usually does not.
+
+## Talk with Neela (One-on-One Tutoring & Speaking Practice)
+
+Open **Talk with Neela** on the home screen. Neela (the friendly Indian Roller bird, ನೀಲಕಂಠ, Karnataka's state bird) is the app's representative and personal Kannada conversation coach.
+
+It has two training modes:
+
+- **Pronunciation practice**: Neela shows a phrase, you speak it, and the engine compares what the browser heard
+  with the phrase word by word. Words are marked right, close, or wrong, with instant phonetic coaching tips
+  (vowel length, aspirated sounds, retroflex consonants). Great attempts earn XP.
+- **Chat with Neela (One-on-One Conversational Training)**:
+  - **5 Real-Life Scenarios**:
+    - 🛺 **Auto ride**: Hail an auto in Bengaluru, check meter, give directions ("ರೈಟ್ ತಗೊಳ್ಳಿ", "ಸ್ವಲ್ಪ ಮುಂದೆ ನಿಲ್ಲಿಸಿ"), and pay via UPI.
+    - ☕ **Darshini / Cafe**: Order masala dosa & filter coffee, customize sugar, choose parcel or dine-in, and pay.
+    - 🛒 **Market shopping**: Inquire about fresh vegetables and fruits, ask prices per kg, bargain politely, and buy.
+    - 👋 **Making friends**: Warm introductions, sharing where you live and work, discussing learning Kannada.
+    - 💬 **Small talk**: Daily chit-chat about food, Bengaluru weather, and life in Karnataka.
+  - **Interactive Scaffolding**: Neela provides 2–3 suggested reply options with every turn (in Kannada script, Roman
+    transliteration, and English meaning), so beginners never get stuck. Tap to send or speak with the microphone!
+  - **Gentle Coaching**: If you speak English or make a Kannada grammar slip, Neela explains why kindly and shows
+    a better way to say it, with a "Practice saying this" button.
+  - **Audio Immersion**: Tap the speaker to hear Neela speak, or toggle "Auto-speak Neela's voice" for a hands-free conversation.
+  - **Mission Completion**: Finishing a conversation earns **+15 XP** and celebratory cheer from Neela.
+
+### Hybrid Setup (Zero Setup Required)
+
+- **Out of the box (no API key needed):** Neela runs interactive, branching guided conversations for all 5 scenarios with full suggestions, audio, and XP rewards.
+- **With a Cloud AI key (unlimited dynamic AI):** Add `GEMINI_API_KEY` (Google AI Studio free tier) or `ANTHROPIC_API_KEY` to `.env.local`:
+
+```
+GEMINI_API_KEY=your_gemini_api_key_here
+# or
+ANTHROPIC_API_KEY=your_anthropic_api_key_here
+```
+
+Optional: `AI_PROVIDER` (`gemini` or `anthropic`, when both keys exist), `GEMINI_MODEL`, `ANTHROPIC_MODEL`.
+
+Before sharing the site publicly, set a monthly spending cap at your AI provider. The app limits each visitor to
+30 messages per 10 minutes, but that limit is kept in memory per server instance, so it is a speed bump, not a guarantee.
+
+Privacy: speech goes to the browser vendor's speech service; typed or spoken chat text goes to your AI provider.
+This app stores no audio.

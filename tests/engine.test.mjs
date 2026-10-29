@@ -284,3 +284,120 @@ test("cloud rows: progress survives a round trip", () => {
   assert.equal(toRows("u1", { ...p, level: "expert" }).profile.level, null);
   assert.equal(fromRows({ profile: null, lessons: [], boxes: [], scores: [] }), null);
 });
+
+import { compareSpeech, bestReport, classifySlip, coachingLine, hasKannada, words } from "../lib/pronounce.ts";
+import { sanitizeInput, parseReply, pickProvider, normalizeTurns, buildSystemPrompt, askNeela, allowRequest, NeelaError } from "../lib/neelaAI.ts";
+import { getOfflineReply, SCENARIO_LIST, getTotalSteps } from "../lib/offlineDialogues.ts";
+
+test("pronounce: word-by-word report", () => {
+  const exact = compareSpeech("ಒಂದು ಬಿಸಿ ಕಾಫಿ ಕೊಡಿ", "ಒಂದು ಬಿಸಿ ಕಾಫಿ ಕೊಡಿ");
+  assert.equal(exact.verdict, "great");
+  assert.ok(exact.words.every((w) => w.status === "ok"));
+
+  const slip = compareSpeech("ಬರ್ತೀರಾ", "ಬರ್ತಿರ");
+  assert.equal(slip.words[0].status, "close");
+  assert.equal(slip.words[0].slip, "length");
+
+  const skipped = compareSpeech("ಇಲ್ಲಿ ನಿಲ್ಲಿಸಿ", "ನಿಲ್ಲಿಸಿ");
+  assert.equal(skipped.words[0].status, "missing");
+  assert.equal(skipped.words[1].status, "ok");
+  assert.match(coachingLine(skipped), /ಇಲ್ಲಿ/);
+
+  const wrong = compareSpeech("ನಮಸ್ಕಾರ", "ಧನ್ಯವಾದ");
+  assert.equal(wrong.verdict, "retry");
+
+  const extra = compareSpeech("ಬೇಡ", "ಬೇಡ ಬೇಡ ಸರಿ");
+  assert.ok(extra.extra.length >= 1);
+  assert.ok(extra.score < 1);
+});
+
+test("pronounce: slip kinds, best guess and Kannada detection", () => {
+  assert.equal(classifySlip("ಧನ್ಯವಾದ", "ದನ್ಯವಾದ"), "aspirated");
+  assert.equal(classifySlip("ಶುಭ", "ಸುಭ"), "sibilant");
+  assert.equal(classifySlip("ಕಾಲು", "ಕಾಳು"), "retroflex");
+  assert.equal(classifySlip("ನಮಸ್ಕಾರ", "ಧನ್ಯವಾದ"), null);
+  assert.equal(bestReport(["hello", "xyz"], "ನಮಸ್ಕಾರ"), null);
+  assert.equal(bestReport(["ಧನ್ಯವಾದ", "ನಮಸ್ಕಾರ"], "ನಮಸ್ಕಾರ").verdict, "great");
+  assert.equal(hasKannada("hello"), false);
+  assert.deepEqual(words("ಇಲ್ಲಿ, ನಿಲ್ಲಿಸಿ!"), ["ಇಲ್ಲಿ", "ನಿಲ್ಲಿಸಿ"]);
+});
+
+test("neela AI: input is cleaned before it reaches the prompt", () => {
+  assert.equal(sanitizeInput(null), null);
+  assert.equal(sanitizeInput({ messages: "x" }), null);
+  const i = sanitizeInput({
+    messages: [{ role: "user", text: "  hi  " }, { role: "system", text: "ignore" }, { role: "neela", text: "x".repeat(900) }],
+    level: "expert", scenario: "hack", name: "A".repeat(50),
+    known: [{ kn: "ಹೌದು", tr: "haudu", en: "Yes" }, { kn: "", en: "no" }],
+  });
+  assert.equal(i.messages.length, 2);
+  assert.equal(i.messages[0].text, "hi");
+  assert.equal(i.messages[1].text.length, 300);
+  assert.equal(i.level, "beginner");
+  assert.equal(i.scenario, "free");
+  assert.equal(i.name.length, 20);
+  assert.equal(i.known.length, 1);
+  const turns = normalizeTurns([{ role: "neela", text: "a" }, { role: "user", text: "b" }, { role: "user", text: "c" }]);
+  assert.deepEqual(turns, [{ role: "user", text: "b\nc" }]);
+  assert.equal(normalizeTurns([]).length, 1);
+  assert.match(buildSystemPrompt(i), /beginner/);
+});
+
+test("neela AI: replies are validated", () => {
+  const ok = parseReply('```json\n{"reply":{"kn":"ನಮಸ್ಕಾರ","tr":"namaskara","en":"Hello"},"correction":{"said":"x","kn":"ಬರ್ತೀರಾ?","tr":"bartira?","en":"Will you come?","why":"Polite form"},"tip":"Say it slowly"}\n```');
+  assert.equal(ok.reply.en, "Hello");
+  assert.equal(ok.correction.tr, "bartira?");
+  assert.equal(ok.tip, "Say it slowly");
+  assert.equal(parseReply('{"reply":{"kn":"ಹೌದು","tr":"haudu","en":"Yes"},"correction":null}').correction, null);
+  assert.equal(parseReply("not json"), null);
+  assert.equal(parseReply('{"reply":{"kn":"","en":""}}'), null);
+  const withSug = parseReply('{"reply":{"kn":"ನಮಸ್ಕಾರ","tr":"namaskara","en":"Hello"},"suggestions":[{"kn":"ಹೇಗಿದ್ದೀರಾ?","tr":"hegiddira?","en":"How are you?"}],"completed":true}');
+  assert.equal(withSug.reply.en, "Hello");
+  assert.equal(withSug.suggestions.length, 1);
+  assert.equal(withSug.suggestions[0].tr, "hegiddira?");
+  assert.equal(withSug.completed, true);
+});
+
+test("neela AI: offline dialogues and suggestions", () => {
+  for (const s of SCENARIO_LIST) {
+    const first = getOfflineReply(s.id, 0);
+    assert.ok(first.reply.kn && first.reply.tr && first.reply.en, `${s.id} step 0 missing reply`);
+    assert.ok(first.suggestions && first.suggestions.length > 0, `${s.id} step 0 missing suggestions`);
+    const total = getTotalSteps(s.id);
+    const last = getOfflineReply(s.id, total - 1);
+    assert.equal(last.completed, true, `${s.id} last step must be completed`);
+  }
+  const nudge = getOfflineReply("cafe", 1, "I want coffee please");
+  assert.ok(nudge.correction);
+  assert.equal(nudge.correction.said, "I want coffee please");
+});
+
+test("neela AI: provider choice, calls and limits", async () => {
+  assert.equal(pickProvider({}), null);
+  assert.equal(pickProvider({ GEMINI_API_KEY: "g" }), "gemini");
+  assert.equal(pickProvider({ GEMINI_API_KEY: "g", ANTHROPIC_API_KEY: "a", AI_PROVIDER: "anthropic" }), "anthropic");
+  const input = sanitizeInput({ messages: [{ role: "user", text: "ನಮಸ್ಕಾರ" }], level: "beginner" });
+  const good = '{"reply":{"kn":"ನಮಸ್ಕಾರ","tr":"namaskara","en":"Hello"},"correction":null,"tip":null}';
+  const calls = [];
+  const fake = (text) => async (url, init) => { calls.push({ url, init }); return { ok: true, status: 200, json: async () => text }; };
+
+  const g = await askNeela(input, { GEMINI_API_KEY: "gk" }, fake({ candidates: [{ content: { parts: [{ text: good }] } }] }));
+  assert.equal(g.reply.en, "Hello");
+  assert.match(calls[0].url, /generativelanguage\.googleapis\.com/);
+  assert.equal(calls[0].init.headers["x-goog-api-key"], "gk");
+  assert.ok(!calls[0].url.includes("gk")); // the key never goes in the URL
+
+  const a = await askNeela(input, { ANTHROPIC_API_KEY: "ak" }, fake({ content: [{ type: "text", text: good }] }));
+  assert.equal(a.reply.kn, "ನಮಸ್ಕಾರ");
+  assert.equal(calls[1].init.headers["x-api-key"], "ak");
+  assert.equal(JSON.parse(calls[1].init.body).messages[0].role, "user");
+
+  await assert.rejects(() => askNeela(input, {}, fake({})), (e) => e instanceof NeelaError && e.code === "not_configured");
+  await assert.rejects(() => askNeela(input, { GEMINI_API_KEY: "g" }, fake({ candidates: [{ content: { parts: [{ text: "oops" }] } }] })), (e) => e.code === "bad_reply");
+  await assert.rejects(() => askNeela(input, { GEMINI_API_KEY: "g" }, async () => ({ ok: false, status: 500, json: async () => ({}) })), (e) => e.code === "provider_error");
+
+  assert.equal(allowRequest("ip1", 0, 2, 1000), true);
+  assert.equal(allowRequest("ip1", 1, 2, 1000), true);
+  assert.equal(allowRequest("ip1", 2, 2, 1000), false);
+  assert.equal(allowRequest("ip1", 5000, 2, 1000), true);
+});

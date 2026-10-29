@@ -79,6 +79,6 @@ export function playPhrase(phraseId: string, kn: string, slow = false) {
     if (await tryAudio(online, slow, id)) return;
     if (id !== token) return;
     if (speakBrowser(kn, slow)) return;
-    toast("No Kannada voice found. Connect to the internet, or run the audio script from the README.");
+    toast("Audio is not available here yet. Try Microsoft Edge, which has a Kannada voice, or check your internet connection.");
   })();
 }
