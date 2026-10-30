@@ -1,15 +1,24 @@
 "use client";
 
 /**
- * Plays a Kannada phrase, trying three sources in order:
- *  1. /audio/<phraseId>.mp3, made by scripts/generate_audio.py (best, works offline)
- *  2. an online Kannada voice, so the buttons work before any mp3 exists
- *  3. the browser's own Kannada voice, which only some devices have
- * If all three fail, a short message tells the learner why, instead of staying silent.
+ * Plays a Kannada phrase, trying sources in order:
+ *  1. /audio/<phraseId>.mp3 (pre-generated static mp3, best for lessons, works 100% offline)
+ *  2. Browser's native Kannada voice (Web Speech API - instant in Edge or Windows with Kannada pack)
+ *  3. /api/tts?text=<text> (Next.js server-side TTS proxy - works in Chrome, Firefox, Safari on any device)
+ *  4. Direct online Google TTS endpoint
+ * If all fail, a toast guides the learner on how to use Edge or install the Windows Kannada speech pack.
  */
 
 let current: HTMLAudioElement | null = null;
 let token = 0;
+let cachedVoices: SpeechSynthesisVoice[] = [];
+
+if (typeof window !== "undefined" && "speechSynthesis" in window) {
+  cachedVoices = window.speechSynthesis.getVoices();
+  window.speechSynthesis.onvoiceschanged = () => {
+    cachedVoices = window.speechSynthesis.getVoices();
+  };
+}
 
 function toast(text: string) {
   if (typeof document === "undefined") return;
@@ -20,27 +29,37 @@ function toast(text: string) {
   el.textContent = text;
   el.style.cssText =
     "position:fixed;left:50%;top:72px;transform:translateX(-50%);max-width:90vw;z-index:9999;" +
-    "background:#1c1b3a;color:#fff;padding:12px 18px;border-radius:14px;font:600 15px system-ui;text-align:center";
+    "background:#1c1b3a;color:#fff;padding:12px 18px;border-radius:14px;font:600 15px system-ui;text-align:center;box-shadow:0 10px 25px rgba(0,0,0,0.4);";
   document.body.appendChild(el);
-  setTimeout(() => el.remove(), 4500);
+  setTimeout(() => el.remove(), 5500);
 }
 
 function kannadaVoice(): SpeechSynthesisVoice | undefined {
-  const voices = window.speechSynthesis.getVoices();
-  return voices.find((v) => v.lang.toLowerCase().replace("_", "-") === "kn-in") ?? voices.find((v) => v.lang.toLowerCase().startsWith("kn"));
+  if (typeof window === "undefined" || !("speechSynthesis" in window)) return undefined;
+  const list = cachedVoices.length ? cachedVoices : window.speechSynthesis.getVoices();
+  return (
+    list.find((v) => v.lang.toLowerCase().replace("_", "-") === "kn-in") ??
+    list.find((v) => v.lang.toLowerCase().startsWith("kn")) ??
+    list.find((v) => v.name.toLowerCase().includes("kannada"))
+  );
 }
 
 function speakBrowser(text: string, slow: boolean): boolean {
-  if (!("speechSynthesis" in window)) return false;
+  if (typeof window === "undefined" || !("speechSynthesis" in window)) return false;
   const voice = kannadaVoice();
-  if (!voice) return false; // reading Kannada with an English voice produces nonsense, so say nothing
-  const u = new SpeechSynthesisUtterance(text);
-  u.voice = voice;
-  u.lang = voice.lang;
-  u.rate = slow ? 0.65 : 0.85;
-  window.speechSynthesis.cancel();
-  window.speechSynthesis.speak(u);
-  return true;
+  if (!voice) return false; // reading Kannada with an English voice produces nonsense, so skip
+
+  try {
+    const u = new SpeechSynthesisUtterance(text);
+    u.voice = voice;
+    u.lang = voice.lang || "kn-IN";
+    u.rate = slow ? 0.65 : 0.85;
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(u);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 function tryAudio(src: string, slow: boolean, id: number): Promise<boolean> {
@@ -57,12 +76,12 @@ function tryAudio(src: string, slow: boolean, id: number): Promise<boolean> {
     };
     audio.onerror = () => done(false);
     audio.onplaying = () => {
-      if (id !== token) audio.pause(); // a newer tap replaced this one while it was loading
+      if (id !== token) audio.pause(); // a newer tap replaced this one while loading
       done(true);
     };
     audio.play().catch(() => done(false));
     // A request that hangs (offline, blocked) should not stop the next source from trying
-    setTimeout(() => done(false), 4000);
+    setTimeout(() => done(false), 3500);
   });
 }
 
@@ -73,12 +92,28 @@ export function playPhrase(phraseId: string, kn: string, slow = false) {
   window.speechSynthesis?.cancel();
 
   (async () => {
-    if (await tryAudio(`/audio/${phraseId}.mp3`, slow, id)) return;
+    // 1. Try static offline mp3 if it's an established phrase ID (not a dynamic AI or offline dialogue tag)
+    const isDynamic = phraseId.startsWith("neela-") || phraseId.startsWith("ai-") || phraseId.startsWith("offline-");
+    if (!isDynamic) {
+      if (await tryAudio(`/audio/${phraseId}.mp3`, slow, id)) return;
+      if (id !== token) return;
+    }
+
+    // 2. Try browser's native Kannada voice (instant & offline in Edge or Windows with Kannada pack)
+    if (speakBrowser(kn, slow)) return;
     if (id !== token) return;
+
+    // 3. Try Next.js server-side TTS proxy (/api/tts)
+    const proxyUrl = `/api/tts?text=${encodeURIComponent(kn)}`;
+    if (await tryAudio(proxyUrl, slow, id)) return;
+    if (id !== token) return;
+
+    // 4. Fallback direct online URL
     const online = `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=kn&q=${encodeURIComponent(kn)}`;
     if (await tryAudio(online, slow, id)) return;
     if (id !== token) return;
-    if (speakBrowser(kn, slow)) return;
-    toast("Audio is not available here yet. Try Microsoft Edge, which has a Kannada voice, or check your internet connection.");
+
+    // 5. If everything failed, inform the user with helpful options
+    toast("Audio is not available offline here yet. Open in Microsoft Edge (which has a free Kannada voice built-in) or check your internet connection.");
   })();
 }

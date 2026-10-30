@@ -1,10 +1,19 @@
 "use client";
 
 import { useEffect, useSyncExternalStore } from "react";
-import { cloudConfigured, getClient, pullRemote, pushRemote } from "@/lib/cloud";
+import { cloudConfigured, getClient, isRealSupabase, pullRemote, pushRemote } from "@/lib/cloud";
 import { mergeProgress } from "@/lib/merge";
 import { getProgress, replaceProgress, useProgress } from "@/lib/progress";
 import type { Progress } from "@/lib/progress";
+
+export const TEST_USER_STORAGE = "kk:test_user";
+
+export type TestUser = {
+  id: string;
+  email: string;
+  name: string;
+  isTest?: boolean;
+};
 
 export type SyncStatus = {
   state: "off" | "loading" | "signedout" | "syncing" | "synced" | "error";
@@ -12,7 +21,18 @@ export type SyncStatus = {
   userId: string | null;
   at: number | null;
   error: string | null;
+  isTestUser?: boolean;
 };
+
+export function getStoredTestUser(): TestUser | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = localStorage.getItem(TEST_USER_STORAGE);
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
 
 const INITIAL: SyncStatus = {
   state: cloudConfigured() ? "loading" : "off",
@@ -20,13 +40,40 @@ const INITIAL: SyncStatus = {
   userId: null,
   at: null,
   error: null,
+  isTestUser: false,
 };
 
 let status: SyncStatus = INITIAL;
 const listeners = new Set<() => void>();
-function setStatus(next: Partial<SyncStatus>) {
+
+export function setStatus(next: Partial<SyncStatus>) {
   status = { ...status, ...next };
   listeners.forEach((l) => l());
+}
+
+export function setStoredTestUser(user: TestUser | null) {
+  if (typeof window === "undefined") return;
+  if (user) {
+    localStorage.setItem(TEST_USER_STORAGE, JSON.stringify(user));
+    setStatus({
+      state: "synced",
+      userId: user.id,
+      email: user.email,
+      at: Date.now(),
+      error: null,
+      isTestUser: true,
+    });
+  } else {
+    localStorage.removeItem(TEST_USER_STORAGE);
+    setStatus({
+      state: "signedout",
+      userId: null,
+      email: null,
+      at: null,
+      error: null,
+      isTestUser: false,
+    });
+  }
 }
 
 export function useSyncStatus(): SyncStatus {
@@ -55,7 +102,7 @@ async function firstSync(userId: string, email: string | null) {
   const c = getClient();
   if (!c || syncing === userId || activeUser === userId) return;
   syncing = userId;
-  setStatus({ state: "syncing", userId, email, error: null });
+  setStatus({ state: "syncing", userId, email, error: null, isTestUser: false });
   try {
     const remote = await pullRemote(c, userId);
     const merged = mergeProgress(getProgress(), remote);
@@ -76,26 +123,50 @@ export function CloudSync() {
   const progress = useProgress();
 
   useEffect(() => {
+    // Check if user has an active test login session
+    const localUser = getStoredTestUser();
+    if (localUser) {
+      setStatus({
+        state: "synced",
+        userId: localUser.id,
+        email: localUser.email,
+        at: Date.now(),
+        error: null,
+        isTestUser: true,
+      });
+      return;
+    }
+
     const c = getClient();
-    if (!c) return;
+    if (!c || !isRealSupabase()) {
+      setStatus({ state: "signedout", isTestUser: false });
+      return;
+    }
+
     const { data } = c.auth.onAuthStateChange((_event, session) => {
       if (session?.user) {
         void firstSync(session.user.id, session.user.email ?? null);
       } else {
         activeUser = null;
-        setStatus({ state: "signedout", userId: null, email: null, error: null });
+        if (!getStoredTestUser()) {
+          setStatus({ state: "signedout", userId: null, email: null, error: null, isTestUser: false });
+        }
       }
     });
+
     void c.auth.getSession().then(({ data: s }) => {
-      if (!s.session) setStatus({ state: "signedout" });
+      if (!s.session && !getStoredTestUser()) {
+        setStatus({ state: "signedout", isTestUser: false });
+      }
     });
+
     return () => data.subscription.unsubscribe();
   }, []);
 
   useEffect(() => {
     const c = getClient();
     const userId = activeUser;
-    if (!c || !userId || fingerprint(progress) === lastFingerprint) return;
+    if (!c || !userId || !isRealSupabase() || fingerprint(progress) === lastFingerprint) return;
     const t = setTimeout(async () => {
       try {
         setStatus({ state: "syncing" });

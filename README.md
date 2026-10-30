@@ -69,11 +69,14 @@ npm run build
 - More chat scenarios (market, restaurant, directions).
 - Per-sound pronunciation drills based on the slips Neela hears most often.
 
-## Cloud save and leaderboard (optional)
+## Accounts, Test Login & Leaderboard
 
-Progress is stored in the browser by default. To add sign-in, sync across devices and a per-level leaderboard,
-follow [`supabase/SETUP.md`](supabase/SETUP.md). The app works exactly as before when the two Supabase
-environment variables are not set.
+Open **Account** from the home screen header.
+- **Instant Test Login**: Tap **"⚡ 1-Click Test Sign In"** or use the pre-filled test credentials:
+  - **Email**: `test@kannada.com`
+  - **Password**: `password123`
+- **Account Creation**: Create any learner account with email & password. Works in local demo mode out of the box, or connects directly to Supabase when configured.
+- **Cloud save and sync (optional)**: To add multi-device cloud database sync across devices and a live public leaderboard, follow [`supabase/SETUP.md`](supabase/SETUP.md). When Supabase is not configured, a demo leaderboard and local test account are provided automatically.
 
 ## Audio
 

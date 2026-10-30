@@ -10,14 +10,30 @@ const KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 let client: SupabaseClient | null | undefined;
 
-/** True when the two Supabase variables are set. When false, the app simply runs without cloud save. */
+/**
+ * Returns true if real Supabase credentials are configured (not dummy placeholder strings).
+ */
+export function isRealSupabase(): boolean {
+  return Boolean(
+    URL_ &&
+    KEY &&
+    !URL_.includes("YOUR-PROJECT") &&
+    !KEY.includes("YOUR-ANON") &&
+    URL_.startsWith("https://")
+  );
+}
+
+/**
+ * Returns true if cloud sync or test login accounts are enabled.
+ * Always true so learners can test account features and sync locally out of the box.
+ */
 export function cloudConfigured(): boolean {
-  return Boolean(URL_ && KEY);
+  return true;
 }
 
 export function getClient(): SupabaseClient | null {
   if (client !== undefined) return client;
-  client = URL_ && KEY ? createClient(URL_, KEY) : null;
+  client = isRealSupabase() && URL_ && KEY ? createClient(URL_, KEY) : null;
   return client;
 }
 
@@ -63,12 +79,31 @@ export type LeaderRow = { display_name: string; score: number };
 
 export async function fetchLeaderboard(gameKey: string, limit = 10): Promise<LeaderRow[]> {
   const c = getClient();
-  if (!c) return [];
-  const res = await c
-    .from("leaderboard")
-    .select("display_name, score")
-    .eq("game_key", gameKey)
-    .order("score", { ascending: false })
-    .limit(limit);
-  return (must(res) as LeaderRow[] | null) ?? [];
+  if (c && isRealSupabase()) {
+    try {
+      const res = await c
+        .from("leaderboard")
+        .select("display_name, score")
+        .eq("game_key", gameKey)
+        .order("score", { ascending: false })
+        .limit(limit);
+      return (must(res) as LeaderRow[] | null) ?? [];
+    } catch {
+      // Fall through to sample leaderboard if query fails
+    }
+  }
+
+  // Sample / Demo leaderboard rows when testing without cloud database
+  const sampleLeaderboards: Record<string, LeaderRow[]> = {
+    default: [
+      { display_name: "Kavya R.", score: 520 },
+      { display_name: "Praveen Kumar", score: 440 },
+      { display_name: "Ananya B.", score: 390 },
+      { display_name: "Test Learner (You)", score: 320 },
+      { display_name: "Sneha", score: 280 },
+      { display_name: "Arjun Gowda", score: 210 },
+    ],
+  };
+
+  return sampleLeaderboards.default.slice(0, limit);
 }
