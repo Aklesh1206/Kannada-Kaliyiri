@@ -9,9 +9,13 @@ export default function Home() {
         <p className="text-xl font-extrabold">
           Kannada Kaliyiri
         </p>
-        <div className="flex items-center gap-4">
-          <Link href="/account" className="rounded-xl px-2 py-1 text-base font-bold text-ink-soft hover:bg-line/60">
-            Account
+        <div className="flex items-center gap-3">
+          <Link
+            href="/account"
+            className="press flex items-center gap-1.5 rounded-xl border-2 border-line bg-raised px-3 py-1.5 text-sm font-bold text-ink hover:border-arishina-deep shadow-xs"
+          >
+            <span>👤</span>
+            <span>Account</span>
           </Link>
           <StatBar />
         </div>

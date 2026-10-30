@@ -99,6 +99,19 @@ export function HomePath() {
         </span>
       </Link>
 
+      <Link
+        href="/account"
+        className="press flex items-center justify-between gap-4 rounded-2xl border-2 border-line bg-paper px-5 py-4 shadow-[0_4px_0_0_var(--line)] hover:border-arishina-deep"
+      >
+        <span>
+          <span className="block text-xl font-bold">Account & Test Login</span>
+          <span className="block text-base text-ink-soft">Sign in with 1-click test credentials or create an account</span>
+        </span>
+        <span className="text-3xl" aria-hidden="true">
+          👤
+        </span>
+      </Link>
+
       {due >= 3 && (
         <Link
           href="/review"
