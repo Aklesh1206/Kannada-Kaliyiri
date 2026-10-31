@@ -9,13 +9,24 @@ Pick the other voice with --voice kn-IN-GaganNeural (male). Default is kn-IN-Sap
 import argparse
 import asyncio
 import json
+import re
 from pathlib import Path
 
 import edge_tts
 
 ROOT = Path(__file__).resolve().parent.parent
 UNITS = ROOT / "content" / "units"
+DIALOGUES = ROOT / "lib" / "offlineDialogues.ts"
 OUT = ROOT / "public" / "audio"
+
+
+def text_name(text: str) -> str:
+    """Same name lib/audio.ts (textAudioName) gives a line of text: FNV-1a over its characters."""
+    h = 0x811C9DC5
+    for ch in text.strip():
+        h ^= ord(ch)
+        h = (h * 0x01000193) & 0xFFFFFFFF
+    return f"t-{h:08x}"
 
 
 async def main() -> None:
@@ -37,6 +48,16 @@ async def main() -> None:
             await edge_tts.Communicate(phrase["kn"], args.voice, rate="-10%").save(str(target))
             print(f"made {target.name}  {phrase['kn']}")
             made += 1
+    # Neela's built-in conversation lines (Talk with Neela works offline with these)
+    lines = sorted(set(re.findall(r'kn:\s*"([^"]+)"', DIALOGUES.read_text(encoding="utf-8"))))
+    for kn in lines:
+        target = OUT / f"{text_name(kn)}.mp3"
+        if target.exists() and not args.force:
+            skipped += 1
+            continue
+        await edge_tts.Communicate(kn, args.voice, rate="-10%").save(str(target))
+        print(f"made {target.name}  {kn}")
+        made += 1
     print(f"done: {made} made, {skipped} skipped")
 
 
