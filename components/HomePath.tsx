@@ -105,7 +105,7 @@ export function HomePath() {
       >
         <span>
           <span className="block text-xl font-bold">Account & Test Login</span>
-          <span className="block text-base text-ink-soft">Sign in with 1-click test credentials or create an account</span>
+          <span className="block text-base text-ink-soft">Playing as a guest: nothing is saved until you sign in</span>
         </span>
         <span className="text-3xl" aria-hidden="true">
           👤
