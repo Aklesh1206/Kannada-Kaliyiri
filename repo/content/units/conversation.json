@@ -1,0 +1,27 @@
+{
+  "id": "conversation",
+  "title": "Everyday conversation",
+  "subtitle": "Talk about yourself, ask for help, plan your day",
+  "level": "intermediate",
+  "accent": "yellow",
+  "phrases": [
+    { "id": "c-ooru", "kn": "ನಿಮ್ಮದು ಯಾವ ಊರು?", "tr": "nimmadu yaava ooru?", "alt": ["nimmadu yava ooru?", "nimmadu yaava uru?"], "en": "Which town are you from?", "reviewed": false },
+    { "id": "c-live", "kn": "ನಾನು ಬೆಂಗಳೂರಿನಲ್ಲಿ ಇರ್ತೀನಿ", "tr": "naanu bengaluurinalli irtini", "alt": ["naanu bengalurinalli irtini", "naanu bengaluru alli irtini"], "en": "I live in Bengaluru", "note": "Swap in your own city.", "reviewed": false },
+    { "id": "c-student", "kn": "ನಾನು ವಿದ್ಯಾರ್ಥಿ", "tr": "naanu vidyaarthi", "alt": ["naanu vidyarthi"], "en": "I am a student", "reviewed": false },
+    { "id": "c-swalpa", "kn": "ನನಗೆ ಸ್ವಲ್ಪ ಕನ್ನಡ ಬರುತ್ತೆ", "tr": "nanage swalpa kannada barutte", "alt": ["nanage swalpa kannada baruttade"], "en": "I know a little Kannada", "reviewed": false },
+    { "id": "c-nidhana", "kn": "ನಿಧಾನವಾಗಿ ಮಾತಾಡಿ", "tr": "nidhaanavaagi maataadi", "alt": ["nidhanavagi matadi"], "en": "Please speak slowly", "reviewed": false },
+    { "id": "c-innondu", "kn": "ಇನ್ನೊಂದು ಸಲ ಹೇಳಿ", "tr": "innondu sala heli", "en": "Say it once more", "reviewed": false },
+    { "id": "c-artha-enu", "kn": "ಇದರ ಅರ್ಥ ಏನು?", "tr": "idara artha enu?", "en": "What does this mean?", "reviewed": false },
+    { "id": "c-artha-aagilla", "kn": "ನನಗೆ ಅರ್ಥ ಆಗಲಿಲ್ಲ", "tr": "nanage artha aagalilla", "alt": ["nanage artha agalilla"], "en": "I did not understand", "reviewed": false },
+    { "id": "c-hege-heloodu", "kn": "ಕನ್ನಡದಲ್ಲಿ ಹೇಗೆ ಹೇಳೋದು?", "tr": "kannadadalli hege heloodu?", "alt": ["kannadadalli hege helodu?"], "en": "How do you say it in Kannada?", "reviewed": false },
+    { "id": "c-gante", "kn": "ಈಗ ಎಷ್ಟು ಗಂಟೆ?", "tr": "iiga eshtu gante?", "alt": ["iga eshtu gante?"], "en": "What time is it now?", "reviewed": false },
+    { "id": "c-naale", "kn": "ನಾಳೆ ಬರ್ತೀನಿ", "tr": "naale bartini", "alt": ["nale bartini"], "en": "I will come tomorrow", "reviewed": false },
+    { "id": "c-samaya", "kn": "ಇವತ್ತು ಸಮಯ ಇಲ್ಲ", "tr": "ivattu samaya illa", "en": "I have no time today", "reviewed": false },
+    { "id": "c-kaayiri", "kn": "ಸ್ವಲ್ಪ ಹೊತ್ತು ಕಾಯಿರಿ", "tr": "swalpa hottu kaayiri", "alt": ["swalpa hottu kayiri"], "en": "Please wait a little while", "reviewed": false }
+  ],
+  "lessons": [
+    { "id": "about-you", "title": "About you", "blurb": "Where you live and what you do", "phrases": ["c-ooru", "c-live", "c-student", "c-swalpa"] },
+    { "id": "follow-along", "title": "Follow along", "blurb": "Ask people to slow down and explain", "phrases": ["c-nidhana", "c-innondu", "c-artha-enu", "c-artha-aagilla", "c-hege-heloodu"] },
+    { "id": "time-and-plans", "title": "Time and plans", "blurb": "Ask the time and talk about tomorrow", "phrases": ["c-gante", "c-naale", "c-samaya", "c-kaayiri"] }
+  ]
+}

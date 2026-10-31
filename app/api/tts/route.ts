@@ -1,6 +1,4 @@
-import { NextResponse } from "next/server";
-
-export const dynamic = "force-dynamic";
+import { connection, NextResponse } from "next/server";
 
 /**
  * Server-side TTS endpoint for Kannada speech.
@@ -8,6 +6,7 @@ export const dynamic = "force-dynamic";
  * avoiding CORS and referrer blocks that prevent browsers from loading it directly.
  */
 export async function GET(req: Request) {
+  await connection();
   const { searchParams } = new URL(req.url);
   const text = searchParams.get("text")?.trim();
 

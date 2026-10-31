@@ -1,0 +1,41 @@
+{
+  "id": "auto",
+  "title": "Auto rickshaw",
+  "subtitle": "Get a ride, give directions, settle the fare",
+  "level": "beginner",
+  "accent": "red",
+  "phrases": [
+    { "id": "a-bartira", "kn": "ಬರ್ತೀರಾ?", "tr": "bartira?", "alt": ["barteera?"], "en": "Will you come? (asking a driver to take you)", "note": "Say the place first: \"Indiranagar bartira?\"", "reviewed": false },
+    { "id": "a-elli", "kn": "ಎಲ್ಲಿಗೆ ಹೋಗಬೇಕು?", "tr": "ellige hogabeku?", "en": "Where do you want to go?", "note": "The driver will ask you this.", "reviewed": false },
+    { "id": "a-meter", "kn": "ಮೀಟರ್ ಹಾಕಿ", "tr": "meter haaki", "alt": ["meter hakki"], "en": "Please put the meter on", "reviewed": false },
+    { "id": "a-eshtu", "kn": "ಎಷ್ಟು?", "tr": "eshtu?", "en": "How much?", "reviewed": false },
+    { "id": "a-nera", "kn": "ನೇರವಾಗಿ ಹೋಗಿ", "tr": "neravaagi hogi", "alt": ["neravagi hogi"], "en": "Go straight", "reviewed": false },
+    { "id": "a-balakke", "kn": "ಬಲಕ್ಕೆ ತಿರುಗಿ", "tr": "balakke tirugi", "en": "Turn right", "reviewed": false },
+    { "id": "a-edakke", "kn": "ಎಡಕ್ಕೆ ತಿರುಗಿ", "tr": "edakke tirugi", "en": "Turn left", "reviewed": false },
+    { "id": "a-nillisi", "kn": "ಇಲ್ಲಿ ನಿಲ್ಲಿಸಿ", "tr": "illi nillisi", "en": "Stop here", "reviewed": false },
+    { "id": "a-chillare", "kn": "ಚಿಲ್ಲರೆ ಇದೆಯಾ?", "tr": "chillare ideya?", "alt": ["chillare idiya?"], "en": "Do you have change?", "reviewed": false },
+    { "id": "a-jasti", "kn": "ತುಂಬಾ ಜಾಸ್ತಿ", "tr": "tumba jaasti", "alt": ["tumba jasti"], "en": "That is too much", "reviewed": false },
+    { "id": "a-kadime", "kn": "ಸ್ವಲ್ಪ ಕಡಿಮೆ ಮಾಡಿ", "tr": "swalpa kadime maadi", "alt": ["svalpa kadime maadi", "swalpa kadime madi"], "en": "Reduce it a little", "note": "Use it to bargain politely.", "reviewed": false },
+    { "id": "a-beda", "kn": "ಬೇಡ", "tr": "beda", "en": "Not needed / No thanks", "reviewed": false }
+  ],
+  "lessons": [
+    {
+      "id": "get-an-auto",
+      "title": "Get an auto",
+      "blurb": "Ask for a ride and the meter",
+      "phrases": ["a-bartira", "a-elli", "a-meter", "a-eshtu"]
+    },
+    {
+      "id": "give-directions",
+      "title": "Give directions",
+      "blurb": "Straight, left, right, stop",
+      "phrases": ["a-nera", "a-balakke", "a-edakke", "a-nillisi"]
+    },
+    {
+      "id": "settle-the-fare",
+      "title": "Settle the fare",
+      "blurb": "Change, bargaining and saying no",
+      "phrases": ["a-chillare", "a-jasti", "a-kadime", "a-beda"]
+    }
+  ]
+}
