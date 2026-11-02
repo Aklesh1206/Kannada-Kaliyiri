@@ -9,6 +9,17 @@
  * If all fail, a toast guides the learner on how to use Edge or install the Windows Kannada speech pack.
  */
 
+/** Same name scripts/generate_audio.py gives to the mp3 of a line of text (FNV-1a hash of the Kannada text). */
+export function textAudioName(text: string): string {
+  let h = 0x811c9dc5;
+  const t = text.trim();
+  for (let i = 0; i < t.length; i++) {
+    h ^= t.charCodeAt(i);
+    h = Math.imul(h, 0x01000193) >>> 0;
+  }
+  return `t-${h.toString(16).padStart(8, "0")}`;
+}
+
 let current: HTMLAudioElement | null = null;
 let token = 0;
 let cachedVoices: SpeechSynthesisVoice[] = [];
@@ -96,6 +107,10 @@ export function playPhrase(phraseId: string, kn: string, slow = false) {
     const isDynamic = phraseId.startsWith("neela-") || phraseId.startsWith("ai-") || phraseId.startsWith("offline-");
     if (!isDynamic) {
       if (await tryAudio(`/audio/${phraseId}.mp3`, slow, id)) return;
+      if (id !== token) return;
+    } else {
+      // Neela's built-in conversation lines have mp3s named after their text (scripts/generate_audio.py makes them)
+      if (await tryAudio(`/audio/${textAudioName(kn)}.mp3`, slow, id)) return;
       if (id !== token) return;
     }
 

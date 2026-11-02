@@ -1,0 +1,156 @@
+{
+  "id": "food",
+  "title": "Food and drink",
+  "subtitle": "Order, taste and pay at a restaurant",
+  "level": "beginner",
+  "accent": "yellow",
+  "phrases": [
+    {
+      "id": "f-neeru",
+      "kn": "ನೀರು ಕೊಡಿ",
+      "tr": "neeru kodi",
+      "alt": [
+        "niru kodi"
+      ],
+      "en": "Water, please",
+      "reviewed": false
+    },
+    {
+      "id": "f-kaafi",
+      "kn": "ಕಾಫಿ ಬೇಕು",
+      "tr": "kaafi beku",
+      "alt": [
+        "kaphi beku",
+        "coffee beku"
+      ],
+      "en": "I want coffee",
+      "reviewed": false
+    },
+    {
+      "id": "f-dose",
+      "kn": "ಒಂದು ದೋಸೆ ಕೊಡಿ",
+      "tr": "ondu dose kodi",
+      "en": "One dosa, please",
+      "reviewed": false
+    },
+    {
+      "id": "f-hasivu",
+      "kn": "ಹಸಿವಾಗಿದೆ",
+      "tr": "hasivaagide",
+      "alt": [
+        "hasivagide"
+      ],
+      "en": "I am hungry",
+      "reviewed": false
+    },
+    {
+      "id": "f-daaha",
+      "kn": "ದಾಹ ಆಗಿದೆ",
+      "tr": "daaha aagide",
+      "alt": [
+        "daha agide"
+      ],
+      "en": "I am thirsty",
+      "reviewed": false
+    },
+    {
+      "id": "f-khaara-beda",
+      "kn": "ಖಾರ ಬೇಡ",
+      "tr": "khaara beda",
+      "alt": [
+        "khara beda"
+      ],
+      "en": "No spice, please",
+      "reviewed": false
+    },
+    {
+      "id": "f-sakkare-beda",
+      "kn": "ಸಕ್ಕರೆ ಬೇಡ",
+      "tr": "sakkare beda",
+      "en": "No sugar, please",
+      "reviewed": false
+    },
+    {
+      "id": "f-ruchi",
+      "kn": "ತುಂಬ ರುಚಿಯಾಗಿದೆ",
+      "tr": "tumba ruchiyaagide",
+      "alt": [
+        "tumba ruchiyagide"
+      ],
+      "en": "It is very tasty",
+      "reviewed": false
+    },
+    {
+      "id": "f-saaku",
+      "kn": "ಸಾಕು",
+      "tr": "saaku",
+      "alt": [
+        "saku"
+      ],
+      "en": "Enough",
+      "note": "Say it when you have had enough food.",
+      "reviewed": false
+    },
+    {
+      "id": "f-bill",
+      "kn": "ಬಿಲ್ ಕೊಡಿ",
+      "tr": "bill kodi",
+      "en": "The bill, please",
+      "reviewed": false
+    },
+    {
+      "id": "f-oota",
+      "kn": "ಊಟ ಆಯ್ತಾ?",
+      "tr": "oota aaytaa?",
+      "alt": [
+        "oota aayta?",
+        "oota aitha?"
+      ],
+      "en": "Have you eaten?",
+      "note": "A very common way to say hello to someone.",
+      "reviewed": false
+    },
+    {
+      "id": "f-innu-swalpa",
+      "kn": "ಇನ್ನು ಸ್ವಲ್ಪ ಬೇಕು",
+      "tr": "innu swalpa beku",
+      "en": "I want a little more",
+      "reviewed": false
+    }
+  ],
+  "lessons": [
+    {
+      "id": "order",
+      "title": "Order a drink and a dosa",
+      "blurb": "Water, coffee, dosa",
+      "phrases": [
+        "f-neeru",
+        "f-kaafi",
+        "f-dose",
+        "f-bill"
+      ]
+    },
+    {
+      "id": "hungry",
+      "title": "Hungry and thirsty",
+      "blurb": "Say how you feel",
+      "phrases": [
+        "f-hasivu",
+        "f-daaha",
+        "f-oota",
+        "f-saaku"
+      ]
+    },
+    {
+      "id": "taste",
+      "title": "Taste and spice",
+      "blurb": "Spice, sugar, more or enough",
+      "phrases": [
+        "f-khaara-beda",
+        "f-sakkare-beda",
+        "f-ruchi",
+        "f-innu-swalpa"
+      ]
+    }
+  ]
+}

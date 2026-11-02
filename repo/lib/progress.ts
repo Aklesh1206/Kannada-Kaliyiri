@@ -66,7 +66,53 @@ export function regenHearts(p: Progress, now = Date.now()): Progress {
 let cache: Progress | null = null;
 const listeners = new Set<() => void>();
 
+/**
+ * Guests keep nothing: progress lives in memory and is gone when the page is reloaded.
+ * Only a signed-in learner (real account, or the local test account) has progress saved on this device.
+ */
+let persist: boolean | null = null;
+
+function isSignedInOnDevice(): boolean {
+  try {
+    if (localStorage.getItem("kk:test_user")) return true;
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i) ?? "";
+      if (/^sb-.+-auth-token$/.test(k)) return true; // Supabase keeps its session under this key
+    }
+  } catch {
+    // storage unavailable: treat as guest
+  }
+  return false;
+}
+
+function persisting(): boolean {
+  if (persist === null) persist = isSignedInOnDevice();
+  return persist;
+}
+
+/** Called when a learner signs in (true) or out (false). Signing in saves what they have so far. */
+export function setPersistence(on: boolean) {
+  if (persist === on) return;
+  persist = on;
+  if (on) {
+    try {
+      localStorage.setItem(KEY, JSON.stringify(snapshot()));
+    } catch {
+      // storage unavailable, progress lives in memory for this tab
+    }
+  } else {
+    try {
+      localStorage.removeItem(KEY);
+    } catch {
+      // ignore
+    }
+    cache = EMPTY;
+    listeners.forEach((l) => l());
+  }
+}
+
 function read(): Progress {
+  if (!persisting()) return EMPTY;
   try {
     const raw = localStorage.getItem(KEY);
     if (raw) return regenHearts({ ...EMPTY, ...JSON.parse(raw) });
@@ -83,10 +129,12 @@ function snapshot(): Progress {
 
 function commit(next: Progress) {
   cache = next;
-  try {
-    localStorage.setItem(KEY, JSON.stringify(next));
-  } catch {
-    // storage unavailable, progress lives in memory for this tab
+  if (persisting()) {
+    try {
+      localStorage.setItem(KEY, JSON.stringify(next));
+    } catch {
+      // storage unavailable, progress lives in memory for this tab
+    }
   }
   listeners.forEach((l) => l());
 }

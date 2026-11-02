@@ -1,0 +1,156 @@
+{
+  "id": "feelings",
+  "title": "Feelings and health",
+  "subtitle": "Say how you feel and ask for help",
+  "level": "advanced",
+  "accent": "yellow",
+  "phrases": [
+    {
+      "id": "fe-khushi",
+      "kn": "ನನಗೆ ಖುಷಿಯಾಗಿದೆ",
+      "tr": "nanage khushiyaagide",
+      "alt": [
+        "nanage khushiyagide"
+      ],
+      "en": "I am happy",
+      "reviewed": false
+    },
+    {
+      "id": "fe-bejaaru",
+      "kn": "ನನಗೆ ಬೇಜಾರಾಗಿದೆ",
+      "tr": "nanage bejaaraagide",
+      "alt": [
+        "nanage bejaragide"
+      ],
+      "en": "I feel low (or bored)",
+      "reviewed": false
+    },
+    {
+      "id": "fe-susta",
+      "kn": "ನನಗೆ ಸುಸ್ತಾಗಿದೆ",
+      "tr": "nanage sustaagide",
+      "alt": [
+        "nanage sustagide"
+      ],
+      "en": "I am tired",
+      "reviewed": false
+    },
+    {
+      "id": "fe-bhaya",
+      "kn": "ನನಗೆ ಭಯ ಆಗ್ತಿದೆ",
+      "tr": "nanage bhaya aagtide",
+      "alt": [
+        "nanage bhaya agtide"
+      ],
+      "en": "I am scared",
+      "reviewed": false
+    },
+    {
+      "id": "fe-hushaar",
+      "kn": "ನನಗೆ ಹುಷಾರಿಲ್ಲ",
+      "tr": "nanage hushaarilla",
+      "alt": [
+        "nanage hushaarilla",
+        "nanage hushariilla"
+      ],
+      "en": "I am not well",
+      "reviewed": false
+    },
+    {
+      "id": "fe-talenovu",
+      "kn": "ನನಗೆ ತಲೆನೋವು ಇದೆ",
+      "tr": "nanage talenovu ide",
+      "en": "I have a headache",
+      "reviewed": false
+    },
+    {
+      "id": "fe-doctor",
+      "kn": "ಡಾಕ್ಟರ್ ಬೇಕು",
+      "tr": "doctor beku",
+      "en": "I need a doctor",
+      "reviewed": false
+    },
+    {
+      "id": "fe-chinte",
+      "kn": "ಚಿಂತೆ ಮಾಡಬೇಡಿ",
+      "tr": "chinte maadabedi",
+      "alt": [
+        "chinte madabedi"
+      ],
+      "en": "Do not worry",
+      "reviewed": false
+    },
+    {
+      "id": "fe-sari-hogutte",
+      "kn": "ಎಲ್ಲಾ ಸರಿ ಹೋಗುತ್ತೆ",
+      "tr": "ellaa sari hogutte",
+      "alt": [
+        "ella sari hogutte"
+      ],
+      "en": "Everything will be fine",
+      "reviewed": false
+    },
+    {
+      "id": "fe-artha",
+      "kn": "ನನಗೆ ಅರ್ಥ ಆಯ್ತು",
+      "tr": "nanage artha aaytu",
+      "alt": [
+        "nanage artha aytu"
+      ],
+      "en": "I understood",
+      "reviewed": false
+    },
+    {
+      "id": "fe-gottilla",
+      "kn": "ನನಗೆ ಗೊತ್ತಿಲ್ಲ",
+      "tr": "nanage gottilla",
+      "en": "I do not know",
+      "reviewed": false
+    },
+    {
+      "id": "fe-sahaaya",
+      "kn": "ದಯವಿಟ್ಟು ಸಹಾಯ ಮಾಡಿ",
+      "tr": "dayavittu sahaaya maadi",
+      "alt": [
+        "dayavittu sahaya madi"
+      ],
+      "en": "Please help me",
+      "reviewed": false
+    }
+  ],
+  "lessons": [
+    {
+      "id": "moods",
+      "title": "How do you feel?",
+      "blurb": "Happy, tired, low, scared",
+      "phrases": [
+        "fe-khushi",
+        "fe-susta",
+        "fe-bejaaru",
+        "fe-bhaya"
+      ]
+    },
+    {
+      "id": "unwell",
+      "title": "Not feeling well",
+      "blurb": "Health and getting help",
+      "phrases": [
+        "fe-hushaar",
+        "fe-talenovu",
+        "fe-doctor",
+        "fe-sahaaya"
+      ]
+    },
+    {
+      "id": "reassure",
+      "title": "Comfort and understanding",
+      "blurb": "Support someone and say what you know",
+      "phrases": [
+        "fe-chinte",
+        "fe-sari-hogutte",
+        "fe-artha",
+        "fe-gottilla"
+      ]
+    }
+  ]
+}

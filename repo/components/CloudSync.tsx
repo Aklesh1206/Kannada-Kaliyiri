@@ -3,7 +3,7 @@
 import { useEffect, useSyncExternalStore } from "react";
 import { cloudConfigured, getClient, isRealSupabase, pullRemote, pushRemote } from "@/lib/cloud";
 import { mergeProgress } from "@/lib/merge";
-import { getProgress, replaceProgress, useProgress } from "@/lib/progress";
+import { getProgress, replaceProgress, setPersistence, useProgress } from "@/lib/progress";
 import type { Progress } from "@/lib/progress";
 
 export const TEST_USER_STORAGE = "kk:test_user";
@@ -55,6 +55,7 @@ export function setStoredTestUser(user: TestUser | null) {
   if (typeof window === "undefined") return;
   if (user) {
     localStorage.setItem(TEST_USER_STORAGE, JSON.stringify(user));
+    setPersistence(true);
     setStatus({
       state: "synced",
       userId: user.id,
@@ -65,6 +66,7 @@ export function setStoredTestUser(user: TestUser | null) {
     });
   } else {
     localStorage.removeItem(TEST_USER_STORAGE);
+    setPersistence(false);
     setStatus({
       state: "signedout",
       userId: null,
@@ -102,6 +104,7 @@ async function firstSync(userId: string, email: string | null) {
   const c = getClient();
   if (!c || syncing === userId || activeUser === userId) return;
   syncing = userId;
+  setPersistence(true); // signed in: from here on progress is saved (what the guest did so far is kept)
   setStatus({ state: "syncing", userId, email, error: null, isTestUser: false });
   try {
     const remote = await pullRemote(c, userId);
@@ -149,6 +152,7 @@ export function CloudSync() {
       } else {
         activeUser = null;
         if (!getStoredTestUser()) {
+          setPersistence(false);
           setStatus({ state: "signedout", userId: null, email: null, error: null, isTestUser: false });
         }
       }

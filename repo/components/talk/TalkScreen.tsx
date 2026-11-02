@@ -17,6 +17,19 @@ import type { Mood } from "../Neela";
 import { SpeakerButton } from "../SpeakerButton";
 
 type Target = { id: string; kn: string; tr: string; en: string };
+/** Plays the learner's own message. Kannada script uses the Kannada voice; English or romanised text uses an English voice. */
+function hearMyself(id: string, text: string) {
+  if (/[\u0C80-\u0CFF]/.test(text)) {
+    playPhrase(id, text);
+    return;
+  }
+  if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "en-IN";
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(u);
+}
+
 type ChatMsg = { role: "user"; text: string } | ({ role: "neela" } & NeelaReply);
 type Mode = "practice" | "chat";
 
@@ -537,8 +550,20 @@ function Chat(props: {
           const isLatest = i === props.chat.length - 1;
           if (m.role === "user") {
             return (
-              <li key={i} className="self-end rounded-2xl rounded-br-sm bg-arishina px-4 py-3 text-lg font-semibold text-[#1c1b3a] shadow-xs max-w-[85%]">
-                {m.text}
+              <li key={i} className="flex items-center gap-2 self-end max-w-[90%]">
+                <button
+                  type="button"
+                  onClick={() => hearMyself(`ai-user-${i}`, m.text)}
+                  aria-label="Hear what you said"
+                  className="press grid h-9 w-9 shrink-0 place-items-center rounded-full bg-line text-ink-soft"
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+                    <path fill="currentColor" d="M3 10v4h4l5 4V6L7 10H3zm13.5 2a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z" />
+                  </svg>
+                </button>
+                <span className="rounded-2xl rounded-br-sm bg-arishina px-4 py-3 text-lg font-semibold text-[#1c1b3a] shadow-xs">
+                  {m.text}
+                </span>
               </li>
             );
           }

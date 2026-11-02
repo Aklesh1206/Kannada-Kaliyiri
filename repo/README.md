@@ -128,3 +128,10 @@ Before sharing the site publicly, set a monthly spending cap at your AI provider
 
 Privacy: speech goes to the browser vendor's speech service; typed or spoken chat text goes to your AI provider.
 This app stores no audio.
+
+### Built-in voice for Talk with Neela
+
+`scripts/generate_audio.py` also makes an mp3 for every built-in conversation line in `lib/offlineDialogues.ts`
+(named `t-<hash>.mp3`). Run the "Generate audio" GitHub Action once and commit the result: then Neela's built-in
+replies play on every device with no Kannada voice pack installed. Replies written live by the AI have no pre-made
+file, so they use `/api/tts` and then the browser voice.

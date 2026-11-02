@@ -12,6 +12,19 @@ const TEST_CREDENTIALS = {
   name: "Test Learner",
 };
 
+function friendlyAuthError(msg: string): string {
+  const m = msg.toLowerCase();
+  if (m.includes("invalid login")) {
+    return "Wrong email or password. If you just created this account, confirm the email we sent first. If you first used Magic Link with this email, that account has no password yet: sign in with Magic Link.";
+  }
+  if (m.includes("not confirmed")) return "Please confirm your email first: open the message we sent and click the link, then sign in.";
+  if (m.includes("rate limit")) return "Too many attempts. Wait a minute and try again.";
+  return msg;
+}
+
+/** The shared test account is for development only. Leave this unset on the live site. */
+const SHOW_TEST_LOGIN = process.env.NEXT_PUBLIC_SHOW_TEST_LOGIN === "true";
+
 type AuthMode = "signin" | "signup" | "otp";
 
 export function AccountPanel() {
@@ -93,12 +106,15 @@ export function AccountPanel() {
         });
         setBusy(false);
         if (error) {
-          setMessage(error.message);
+          setMessage(friendlyAuthError(error.message));
+        } else if (data.user && data.user.identities && data.user.identities.length === 0) {
+          // Supabase answers "success" for an email that already exists, without creating anything
+          setMessage("This email already has an account. Use Sign In with your password, or the Magic Link tab if you signed up that way.");
         } else if (data.session) {
           if (displayName.trim()) setName(displayName.trim());
           setSuccessMsg("Account created and signed in!");
         } else {
-          setSuccessMsg("Account created! Check your email to confirm, or use the 1-Click Test Login.");
+          setSuccessMsg("Account created! We sent a confirmation email: open it, click the link, then come back and sign in.");
         }
       } else {
         const { data, error } = await c.auth.signInWithPassword({
@@ -107,7 +123,7 @@ export function AccountPanel() {
         });
         setBusy(false);
         if (error) {
-          setMessage(error.message);
+          setMessage(friendlyAuthError(error.message));
         } else if (data.user) {
           setSuccessMsg("Signed in successfully!");
         }
@@ -192,11 +208,12 @@ export function AccountPanel() {
       {!signedIn ? (
         <>
           <NeelaSays mood="happy">
-            Sign in or create an account to save your progress, preserve your streak across devices, and join the
-            leaderboard!
+            You are playing as a guest, so nothing is saved: your progress is gone when you reload. Sign in or create an
+            account to save your progress, keep your streak across devices, and join the leaderboard!
           </NeelaSays>
 
-          {/* Preset Test Credentials Card */}
+          {/* Preset test credentials: only shown when NEXT_PUBLIC_SHOW_TEST_LOGIN=true (local testing) */}
+          {SHOW_TEST_LOGIN && (
           <div className="flex flex-col gap-3 rounded-2xl border-2 border-arishina-deep bg-arishina-wash p-5 shadow-sm">
             <div className="flex items-center justify-between">
               <span className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-arishina-deep">
@@ -237,6 +254,7 @@ export function AccountPanel() {
               </button>
             </div>
           </div>
+          )}
 
           {/* Mode Switcher Tabs */}
           <div className="flex rounded-xl bg-line p-1" role="tablist">
