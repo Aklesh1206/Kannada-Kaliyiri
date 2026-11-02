@@ -1,0 +1,152 @@
+{
+  "id": "market",
+  "title": "Shopping",
+  "subtitle": "Ask prices, bargain and pay",
+  "level": "intermediate",
+  "accent": "red",
+  "phrases": [
+    {
+      "id": "m-bele",
+      "kn": "ಇದರ ಬೆಲೆ ಎಷ್ಟು?",
+      "tr": "idara bele eshtu?",
+      "en": "What is the price of this?",
+      "reviewed": false
+    },
+    {
+      "id": "m-dubaari",
+      "kn": "ಇದು ತುಂಬ ದುಬಾರಿ",
+      "tr": "idu tumba dubaari",
+      "alt": [
+        "idu tumba dubari"
+      ],
+      "en": "This is too expensive",
+      "reviewed": false
+    },
+    {
+      "id": "m-bere-banna",
+      "kn": "ಬೇರೆ ಬಣ್ಣ ಇದೆಯಾ?",
+      "tr": "bere banna ideyaa?",
+      "alt": [
+        "bere banna ideya?"
+      ],
+      "en": "Do you have another colour?",
+      "reviewed": false
+    },
+    {
+      "id": "m-ondu-kg",
+      "kn": "ಒಂದು ಕೆಜಿ ಕೊಡಿ",
+      "tr": "ondu kg kodi",
+      "en": "Give me one kilo",
+      "reviewed": false
+    },
+    {
+      "id": "m-ardha-kg",
+      "kn": "ಅರ್ಧ ಕೆಜಿ ಸಾಕು",
+      "tr": "ardha kg saaku",
+      "alt": [
+        "ardha kg saku"
+      ],
+      "en": "Half a kilo is enough",
+      "reviewed": false
+    },
+    {
+      "id": "m-fresh",
+      "kn": "ಇದು ಫ್ರೆಶ್ ಆಗಿದೆಯಾ?",
+      "tr": "idu fresh aagideyaa?",
+      "en": "Is this fresh?",
+      "reviewed": false
+    },
+    {
+      "id": "m-bag",
+      "kn": "ಒಂದು ಬ್ಯಾಗ್ ಬೇಕು",
+      "tr": "ondu bag beku",
+      "en": "I need a bag",
+      "reviewed": false
+    },
+    {
+      "id": "m-card",
+      "kn": "ಕಾರ್ಡ್ ತಗೋತೀರಾ?",
+      "tr": "card tagotiraa?",
+      "alt": [
+        "card tagotira?"
+      ],
+      "en": "Do you take cards?",
+      "reviewed": false
+    },
+    {
+      "id": "m-upi",
+      "kn": "ಯುಪಿಐ ಇದೆಯಾ?",
+      "tr": "UPI ideyaa?",
+      "alt": [
+        "upi ideya?"
+      ],
+      "en": "Do you have UPI?",
+      "reviewed": false
+    },
+    {
+      "id": "m-ishta",
+      "kn": "ಇದು ನನಗೆ ಇಷ್ಟ ಆಯ್ತು",
+      "tr": "idu nanage ishta aaytu",
+      "alt": [
+        "idu nanage ishta aytu"
+      ],
+      "en": "I liked this",
+      "reviewed": false
+    },
+    {
+      "id": "m-matte",
+      "kn": "ಬೇಡ, ಮತ್ತೆ ಬರ್ತೀನಿ",
+      "tr": "beda, matte bartini",
+      "alt": [
+        "beda matte barteeni"
+      ],
+      "en": "No thanks, I will come again",
+      "reviewed": false
+    },
+    {
+      "id": "m-bill-maadi",
+      "kn": "ಬಿಲ್ ಮಾಡಿ",
+      "tr": "bill maadi",
+      "alt": [
+        "bill madi"
+      ],
+      "en": "Please make the bill",
+      "reviewed": false
+    }
+  ],
+  "lessons": [
+    {
+      "id": "prices",
+      "title": "Ask the price",
+      "blurb": "Price, expensive, colours",
+      "phrases": [
+        "m-bele",
+        "m-dubaari",
+        "m-bere-banna",
+        "m-fresh"
+      ]
+    },
+    {
+      "id": "quantity",
+      "title": "How much to buy",
+      "blurb": "Kilos and bags",
+      "phrases": [
+        "m-ondu-kg",
+        "m-ardha-kg",
+        "m-bag",
+        "m-ishta"
+      ]
+    },
+    {
+      "id": "pay",
+      "title": "Pay and leave",
+      "blurb": "Cards, UPI and polite exits",
+      "phrases": [
+        "m-card",
+        "m-upi",
+        "m-bill-maadi",
+        "m-matte"
+      ]
+    }
+  ]
+}

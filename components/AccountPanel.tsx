@@ -22,6 +22,9 @@ function friendlyAuthError(msg: string): string {
   return msg;
 }
 
+/** The shared test account is for development only. Leave this unset on the live site. */
+const SHOW_TEST_LOGIN = process.env.NEXT_PUBLIC_SHOW_TEST_LOGIN === "true";
+
 type AuthMode = "signin" | "signup" | "otp";
 
 export function AccountPanel() {
@@ -209,7 +212,8 @@ export function AccountPanel() {
             account to save your progress, keep your streak across devices, and join the leaderboard!
           </NeelaSays>
 
-          {/* Preset Test Credentials Card */}
+          {/* Preset test credentials: only shown when NEXT_PUBLIC_SHOW_TEST_LOGIN=true (local testing) */}
+          {SHOW_TEST_LOGIN && (
           <div className="flex flex-col gap-3 rounded-2xl border-2 border-arishina-deep bg-arishina-wash p-5 shadow-sm">
             <div className="flex items-center justify-between">
               <span className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-arishina-deep">
@@ -250,6 +254,7 @@ export function AccountPanel() {
               </button>
             </div>
           </div>
+          )}
 
           {/* Mode Switcher Tabs */}
           <div className="flex rounded-xl bg-line p-1" role="tablist">

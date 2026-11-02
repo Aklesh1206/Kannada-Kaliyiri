@@ -1,0 +1,149 @@
+{
+  "id": "directions",
+  "title": "Getting around",
+  "subtitle": "Buses, metro and finding the way",
+  "level": "intermediate",
+  "accent": "yellow",
+  "phrases": [
+    {
+      "id": "d-bus-stop",
+      "kn": "ಬಸ್ ಸ್ಟಾಪ್ ಎಲ್ಲಿದೆ?",
+      "tr": "bus stop ellide?",
+      "en": "Where is the bus stop?",
+      "reviewed": false
+    },
+    {
+      "id": "d-metro",
+      "kn": "ಮೆಟ್ರೋ ಸ್ಟೇಷನ್ ಎಲ್ಲಿದೆ?",
+      "tr": "metro station ellide?",
+      "en": "Where is the metro station?",
+      "reviewed": false
+    },
+    {
+      "id": "d-yaava-bus",
+      "kn": "ಇದು ಯಾವ ಬಸ್?",
+      "tr": "idu yaava bus?",
+      "alt": [
+        "idu yava bus?"
+      ],
+      "en": "Which bus is this?",
+      "reviewed": false
+    },
+    {
+      "id": "d-majestic",
+      "kn": "ಈ ಬಸ್ ಮೆಜೆಸ್ಟಿಕ್‌ಗೆ ಹೋಗುತ್ತಾ?",
+      "tr": "ee bus majestic-ge hogutta?",
+      "alt": [
+        "ee bus majestic ge hogutta?"
+      ],
+      "en": "Does this bus go to Majestic?",
+      "reviewed": false
+    },
+    {
+      "id": "d-balakke",
+      "kn": "ಬಲಕ್ಕೆ ತಿರುಗಿ",
+      "tr": "balakke tirugi",
+      "en": "Turn right",
+      "reviewed": false
+    },
+    {
+      "id": "d-edakke",
+      "kn": "ಎಡಕ್ಕೆ ತಿರುಗಿ",
+      "tr": "edakke tirugi",
+      "en": "Turn left",
+      "reviewed": false
+    },
+    {
+      "id": "d-nera",
+      "kn": "ನೇರವಾಗಿ ಹೋಗಿ",
+      "tr": "neravaagi hogi",
+      "alt": [
+        "neravagi hogi"
+      ],
+      "en": "Go straight",
+      "reviewed": false
+    },
+    {
+      "id": "d-dura",
+      "kn": "ಎಷ್ಟು ದೂರ?",
+      "tr": "eshtu doora?",
+      "alt": [
+        "eshtu dura?"
+      ],
+      "en": "How far is it?",
+      "reviewed": false
+    },
+    {
+      "id": "d-hottu",
+      "kn": "ಎಷ್ಟು ಹೊತ್ತು ಬೇಕು?",
+      "tr": "eshtu hottu beku?",
+      "en": "How long will it take?",
+      "reviewed": false
+    },
+    {
+      "id": "d-daari",
+      "kn": "ನಾನು ದಾರಿ ತಪ್ಪಿದ್ದೀನಿ",
+      "tr": "naanu daari tappiddini",
+      "alt": [
+        "nanu dari tappiddini"
+      ],
+      "en": "I am lost",
+      "reviewed": false
+    },
+    {
+      "id": "d-ilibeku",
+      "kn": "ನಾನು ಇಲ್ಲಿ ಇಳೀಬೇಕು",
+      "tr": "naanu illi ilibeku",
+      "alt": [
+        "nanu illi ilibeku"
+      ],
+      "en": "I need to get off here",
+      "reviewed": false
+    },
+    {
+      "id": "d-sahaaya",
+      "kn": "ಸ್ವಲ್ಪ ಸಹಾಯ ಮಾಡ್ತೀರಾ?",
+      "tr": "swalpa sahaaya maadtiraa?",
+      "alt": [
+        "swalpa sahaya madtira?"
+      ],
+      "en": "Could you help me a little?",
+      "reviewed": false
+    }
+  ],
+  "lessons": [
+    {
+      "id": "find-stop",
+      "title": "Find the stop",
+      "blurb": "Bus and metro",
+      "phrases": [
+        "d-bus-stop",
+        "d-metro",
+        "d-yaava-bus",
+        "d-majestic"
+      ]
+    },
+    {
+      "id": "turns",
+      "title": "Turns and distance",
+      "blurb": "Left, right, straight, far",
+      "phrases": [
+        "d-balakke",
+        "d-edakke",
+        "d-nera",
+        "d-dura"
+      ]
+    },
+    {
+      "id": "lost",
+      "title": "Lost? Ask for help",
+      "blurb": "Time, help and getting off",
+      "phrases": [
+        "d-hottu",
+        "d-daari",
+        "d-ilibeku",
+        "d-sahaaya"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,134 @@
+{
+  "id": "family",
+  "title": "Family and friends",
+  "subtitle": "Talk about the people in your life",
+  "level": "beginner",
+  "accent": "red",
+  "phrases": [
+    {
+      "id": "fam-amma",
+      "kn": "ಅಮ್ಮ",
+      "tr": "amma",
+      "en": "Mother",
+      "reviewed": false
+    },
+    {
+      "id": "fam-appa",
+      "kn": "ಅಪ್ಪ",
+      "tr": "appa",
+      "en": "Father",
+      "reviewed": false
+    },
+    {
+      "id": "fam-anna",
+      "kn": "ಅಣ್ಣ",
+      "tr": "anna",
+      "en": "Elder brother",
+      "note": "Also a respectful way to call a man a little older than you.",
+      "reviewed": false
+    },
+    {
+      "id": "fam-akka",
+      "kn": "ಅಕ್ಕ",
+      "tr": "akka",
+      "en": "Elder sister",
+      "note": "Also used for any woman a little older than you.",
+      "reviewed": false
+    },
+    {
+      "id": "fam-tamma",
+      "kn": "ತಮ್ಮ",
+      "tr": "tamma",
+      "en": "Younger brother",
+      "reviewed": false
+    },
+    {
+      "id": "fam-tangi",
+      "kn": "ತಂಗಿ",
+      "tr": "tangi",
+      "en": "Younger sister",
+      "reviewed": false
+    },
+    {
+      "id": "fam-ajja",
+      "kn": "ಅಜ್ಜ",
+      "tr": "ajja",
+      "en": "Grandfather",
+      "reviewed": false
+    },
+    {
+      "id": "fam-ajji",
+      "kn": "ಅಜ್ಜಿ",
+      "tr": "ajji",
+      "en": "Grandmother",
+      "reviewed": false
+    },
+    {
+      "id": "fam-snehita",
+      "kn": "ಸ್ನೇಹಿತ",
+      "tr": "snehita",
+      "en": "Friend (male)",
+      "note": "A woman friend is snehite (ಸ್ನೇಹಿತೆ).",
+      "reviewed": false
+    },
+    {
+      "id": "fam-idu-mane",
+      "kn": "ಇದು ನನ್ನ ಮನೆ",
+      "tr": "idu nanna mane",
+      "en": "This is my home",
+      "reviewed": false
+    },
+    {
+      "id": "fam-nimma-mane",
+      "kn": "ನಿಮ್ಮ ಮನೆ ಎಲ್ಲಿದೆ?",
+      "tr": "nimma mane ellide?",
+      "en": "Where is your home?",
+      "reviewed": false
+    },
+    {
+      "id": "fam-obba-akka",
+      "kn": "ನನಗೆ ಒಬ್ಬ ಅಕ್ಕ ಇದ್ದಾಳೆ",
+      "tr": "nanage obba akka iddaale",
+      "alt": [
+        "nanage obba akka iddale"
+      ],
+      "en": "I have one elder sister",
+      "reviewed": false
+    }
+  ],
+  "lessons": [
+    {
+      "id": "parents",
+      "title": "Parents and grandparents",
+      "blurb": "amma, appa, ajja, ajji",
+      "phrases": [
+        "fam-amma",
+        "fam-appa",
+        "fam-ajja",
+        "fam-ajji"
+      ]
+    },
+    {
+      "id": "siblings",
+      "title": "Brothers and sisters",
+      "blurb": "anna, akka, tamma, tangi",
+      "phrases": [
+        "fam-anna",
+        "fam-akka",
+        "fam-tamma",
+        "fam-tangi"
+      ]
+    },
+    {
+      "id": "my-people",
+      "title": "My people",
+      "blurb": "Friends and home",
+      "phrases": [
+        "fam-snehita",
+        "fam-idu-mane",
+        "fam-nimma-mane",
+        "fam-obba-akka"
+      ]
+    }
+  ]
+}

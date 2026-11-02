@@ -1,0 +1,140 @@
+{
+  "id": "numbers",
+  "title": "Numbers",
+  "subtitle": "Count from one to a hundred",
+  "level": "beginner",
+  "accent": "yellow",
+  "phrases": [
+    {
+      "id": "n-ondu",
+      "kn": "ಒಂದು",
+      "tr": "ondu",
+      "en": "One",
+      "reviewed": false
+    },
+    {
+      "id": "n-eradu",
+      "kn": "ಎರಡು",
+      "tr": "eradu",
+      "en": "Two",
+      "reviewed": false
+    },
+    {
+      "id": "n-mooru",
+      "kn": "ಮೂರು",
+      "tr": "mooru",
+      "alt": [
+        "muru"
+      ],
+      "en": "Three",
+      "reviewed": false
+    },
+    {
+      "id": "n-naalku",
+      "kn": "ನಾಲ್ಕು",
+      "tr": "naalku",
+      "alt": [
+        "nalku"
+      ],
+      "en": "Four",
+      "reviewed": false
+    },
+    {
+      "id": "n-aidu",
+      "kn": "ಐದು",
+      "tr": "aidu",
+      "en": "Five",
+      "reviewed": false
+    },
+    {
+      "id": "n-aaru",
+      "kn": "ಆರು",
+      "tr": "aaru",
+      "alt": [
+        "aru"
+      ],
+      "en": "Six",
+      "reviewed": false
+    },
+    {
+      "id": "n-elu",
+      "kn": "ಏಳು",
+      "tr": "elu",
+      "en": "Seven",
+      "reviewed": false
+    },
+    {
+      "id": "n-entu",
+      "kn": "ಎಂಟು",
+      "tr": "entu",
+      "en": "Eight",
+      "reviewed": false
+    },
+    {
+      "id": "n-ombattu",
+      "kn": "ಒಂಬತ್ತು",
+      "tr": "ombattu",
+      "en": "Nine",
+      "reviewed": false
+    },
+    {
+      "id": "n-hattu",
+      "kn": "ಹತ್ತು",
+      "tr": "hattu",
+      "en": "Ten",
+      "reviewed": false
+    },
+    {
+      "id": "n-ippattu",
+      "kn": "ಇಪ್ಪತ್ತು",
+      "tr": "ippattu",
+      "en": "Twenty",
+      "reviewed": false
+    },
+    {
+      "id": "n-nooru",
+      "kn": "ನೂರು",
+      "tr": "nooru",
+      "alt": [
+        "nuru"
+      ],
+      "en": "One hundred",
+      "reviewed": false
+    }
+  ],
+  "lessons": [
+    {
+      "id": "one-to-four",
+      "title": "One to four",
+      "blurb": "ondu, eradu, mooru, naalku",
+      "phrases": [
+        "n-ondu",
+        "n-eradu",
+        "n-mooru",
+        "n-naalku"
+      ]
+    },
+    {
+      "id": "five-to-eight",
+      "title": "Five to eight",
+      "blurb": "aidu, aaru, elu, entu",
+      "phrases": [
+        "n-aidu",
+        "n-aaru",
+        "n-elu",
+        "n-entu"
+      ]
+    },
+    {
+      "id": "big-numbers",
+      "title": "Nine to a hundred",
+      "blurb": "Useful for prices",
+      "phrases": [
+        "n-ombattu",
+        "n-hattu",
+        "n-ippattu",
+        "n-nooru"
+      ]
+    }
+  ]
+}

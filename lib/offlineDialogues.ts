@@ -42,6 +42,27 @@ export const SCENARIO_LIST: ScenarioInfo[] = [
     description: "Warm, casual introductions and friendly small talk with a Kannada speaker.",
   },
   {
+    id: "bus-metro",
+    label: "Bus and metro",
+    icon: "🚌",
+    mission: "Find the bus, ask how long it takes, get off at the right stop and find the metro.",
+    description: "Getting around Bengaluru by bus and metro.",
+  },
+  {
+    id: "festival",
+    label: "Festival visit",
+    icon: "🪔",
+    mission: "Wish a neighbour Happy Ugadi, accept sweets and chat about the festival.",
+    description: "Festival greetings and a friendly visit.",
+  },
+  {
+    id: "clinic",
+    label: "Not feeling well",
+    icon: "🩺",
+    mission: "Tell the clinic how you feel, answer a question and understand the advice.",
+    description: "Saying you are unwell and understanding simple advice.",
+  },
+  {
     id: "free",
     label: "Small talk",
     icon: "💬",
@@ -344,6 +365,223 @@ const DIALOGUES: Record<string, ScenarioDialogue> = {
           { kn: "ಮತ್ತೆ ಸಿಗೋಣ, ಶುಭ ದಿನ!", tr: "Matte sigona, shubha dina!", en: "See you again, have a good day!" },
         ],
         tip: "'ಮತ್ತೆ ಸಿಗೋಣ' (matte sigona) = 'let's meet again / see you'.",
+        completed: true,
+      },
+    ],
+  },
+  "bus-metro": {
+    steps: [
+      {
+        reply: {
+          kn: "ನಮಸ್ಕಾರ! ಎಲ್ಲಿಗೆ ಹೋಗ್ಬೇಕು?",
+          tr: "Namaskara! Ellige hogabeku?",
+          en: "Hello! Where do you need to go?",
+        },
+        suggestions: [
+          { kn: "ನಾನು ಮೆಜೆಸ್ಟಿಕ್‌ಗೆ ಹೋಗ್ಬೇಕು", tr: "Naanu majestic-ge hogabeku", en: "I need to go to Majestic" },
+          { kn: "ಬಸ್ ಸ್ಟಾಪ್ ಎಲ್ಲಿದೆ?", tr: "Bus stop ellide?", en: "Where is the bus stop?" },
+          { kn: "ಈ ಬಸ್ ಮೆಜೆಸ್ಟಿಕ್‌ಗೆ ಹೋಗುತ್ತಾ?", tr: "Ee bus majestic-ge hogutta?", en: "Does this bus go to Majestic?" },
+        ],
+        tip: "Majestic is the main bus station in Bengaluru. 'ಹೋಗುತ್ತಾ?' (hogutta?) asks 'does it go?'",
+      },
+      {
+        reply: {
+          kn: "ಹೌದು, ಈ ಬಸ್ ಮೆಜೆಸ್ಟಿಕ್‌ಗೆ ಹೋಗುತ್ತೆ. ಹತ್ತಿ.",
+          tr: "Haudu, ee bus majestic-ge hogutte. Hatti.",
+          en: "Yes, this bus goes to Majestic. Get on.",
+        },
+        suggestions: [
+          { kn: "ಎಷ್ಟು ಹೊತ್ತು ಬೇಕು?", tr: "Eshtu hottu beku?", en: "How long will it take?" },
+          { kn: "ಎಷ್ಟು ದೂರ?", tr: "Eshtu doora?", en: "How far is it?" },
+          { kn: "ಧನ್ಯವಾದಗಳು", tr: "Dhanyavaadagalu", en: "Thank you" },
+        ],
+        tip: "'ಹತ್ತಿ' (hatti) means 'climb on', 'ಇಳೀರಿ' (ilire) means 'get off'.",
+      },
+      {
+        reply: {
+          kn: "ಸುಮಾರು ಅರ್ಧ ಗಂಟೆ ಬೇಕು.",
+          tr: "Sumaaru ardha gante beku.",
+          en: "It takes about half an hour.",
+        },
+        suggestions: [
+          { kn: "ಸರಿ, ಧನ್ಯವಾದಗಳು", tr: "Sari, dhanyavaadagalu", en: "Okay, thank you" },
+          { kn: "ಮೆಟ್ರೋ ಸ್ಟೇಷನ್ ಎಲ್ಲಿದೆ?", tr: "Metro station ellide?", en: "Where is the metro station?" },
+          { kn: "ಸ್ವಲ್ಪ ಸಹಾಯ ಮಾಡ್ತೀರಾ?", tr: "Swalpa sahaaya maadtira?", en: "Could you help me a little?" },
+        ],
+        tip: "'ಗಂಟೆ' (gante) = hour, and also 'bell'.",
+      },
+      {
+        reply: {
+          kn: "ಮುಂದಿನ ಸ್ಟಾಪ್ ಮೆಜೆಸ್ಟಿಕ್. ನೀವು ಎಲ್ಲಿ ಇಳೀಬೇಕು?",
+          tr: "Mundina stop majestic. Neevu elli ilibeku?",
+          en: "The next stop is Majestic. Where do you need to get off?",
+        },
+        suggestions: [
+          { kn: "ನಾನು ಇಲ್ಲಿ ಇಳೀಬೇಕು", tr: "Naanu illi ilibeku", en: "I need to get off here" },
+          { kn: "ಮೆಟ್ರೋ ಹತ್ತಿರ ಇಳೀತೀನಿ", tr: "Metro hattira iliteeni", en: "I will get off near the metro" },
+          { kn: "ನಾನು ದಾರಿ ತಪ್ಪಿದ್ದೀನಿ", tr: "Naanu daari tappiddini", en: "I am lost" },
+        ],
+        tip: "Say 'ನಾನು ಇಲ್ಲಿ ಇಳೀಬೇಕು' to the conductor before your stop.",
+      },
+      {
+        reply: {
+          kn: "ಇಳಿದ ಮೇಲೆ ನೇರವಾಗಿ ಹೋಗಿ, ಆಮೇಲೆ ಬಲಕ್ಕೆ ತಿರುಗಿ. ಮೆಟ್ರೋ ಅಲ್ಲಿದೆ.",
+          tr: "Ilida mele neravaagi hogi, aamele balakke tirugi. Metro alliide.",
+          en: "After getting off, go straight, then turn right. The metro is there.",
+        },
+        suggestions: [
+          { kn: "ಅರ್ಥ ಆಯ್ತು, ಧನ್ಯವಾದಗಳು", tr: "Artha aaytu, dhanyavaadagalu", en: "I understood, thank you" },
+          { kn: "ಇನ್ನೊಮ್ಮೆ ಹೇಳಿ", tr: "Innomme heli", en: "Please say it once more" },
+          { kn: "ಬಲಕ್ಕೆ ತಿರುಗಿ, ಸರಿ", tr: "Balakke tirugi, sari", en: "Turn right, okay" },
+        ],
+        tip: "Directions: ನೇರ (straight), ಬಲಕ್ಕೆ (right), ಎಡಕ್ಕೆ (left).",
+      },
+      {
+        reply: {
+          kn: "ಶುಭ ಪ್ರಯಾಣ! ಹೋಗಿ ಬನ್ನಿ.",
+          tr: "Shubha prayaana! Hogi banni.",
+          en: "Have a good journey! Go and come back.",
+        },
+        suggestions: [
+          { kn: "ಧನ್ಯವಾದಗಳು, ಹೋಗಿ ಬರ್ತೀನಿ!", tr: "Dhanyavaadagalu, hogi bartini!", en: "Thank you, I will go and come back!" },
+        ],
+        tip: "'ಹೋಗಿ ಬನ್ನಿ' is the Kannada goodbye: 'go and come back'.",
+        completed: true,
+      },
+    ],
+  },
+  "festival": {
+    steps: [
+      {
+        reply: {
+          kn: "ಯುಗಾದಿ ಹಬ್ಬದ ಶುಭಾಶಯಗಳು!",
+          tr: "Yugaadi habbada shubhaashayagalu!",
+          en: "Happy Ugadi!",
+        },
+        suggestions: [
+          { kn: "ನಿಮಗೂ ಹಾಗೆಯೇ", tr: "Nimagoo haageye", en: "The same to you" },
+          { kn: "ಹಬ್ಬದ ಶುಭಾಶಯಗಳು", tr: "Habbada shubhaashayagalu", en: "Festival wishes" },
+          { kn: "ಯುಗಾದಿ ಹಬ್ಬದ ಶುಭಾಶಯಗಳು", tr: "Yugaadi habbada shubhaashayagalu", en: "Happy Ugadi" },
+        ],
+        tip: "Ugadi is the Kannada New Year. 'ಶುಭಾಶಯಗಳು' (shubhaashayagalu) means good wishes.",
+      },
+      {
+        reply: {
+          kn: "ಬನ್ನಿ, ಒಳಗೆ ಬನ್ನಿ. ಬೇವು ಬೆಲ್ಲ ತಗೊಳ್ಳಿ.",
+          tr: "Banni, olage banni. Bevu bella tagolli.",
+          en: "Please come in. Have some neem and jaggery.",
+        },
+        suggestions: [
+          { kn: "ಧನ್ಯವಾದಗಳು", tr: "Dhanyavaadagalu", en: "Thank you" },
+          { kn: "ತುಂಬ ರುಚಿಯಾಗಿದೆ", tr: "Tumba ruchiyaagide", en: "It is very tasty" },
+          { kn: "ಇದು ನನಗೆ ಇಷ್ಟ ಆಯ್ತು", tr: "Idu nanage ishta aaytu", en: "I liked this" },
+        ],
+        tip: "On Ugadi people eat bevu-bella, bitter neem with sweet jaggery, for the mix of joy and sorrow in life.",
+      },
+      {
+        reply: {
+          kn: "ನೀವು ಹಬ್ಬಕ್ಕೆ ಎಲ್ಲಿಗಾದರೂ ಹೋಗ್ತೀರಾ?",
+          tr: "Neevu habbakke elligaadaroo hogtira?",
+          en: "Are you going anywhere for the festival?",
+        },
+        suggestions: [
+          { kn: "ನಾನು ಮನೆಯಲ್ಲೇ ಇರ್ತೀನಿ", tr: "Naanu maneyalle irtini", en: "I will stay at home" },
+          { kn: "ಹೌದು, ಊರಿಗೆ ಹೋಗ್ತೀನಿ", tr: "Haudu, oorige hogtini", en: "Yes, I am going to my hometown" },
+          { kn: "ಇನ್ನೊಮ್ಮೆ ಹೇಳಿ", tr: "Innomme heli", en: "Please say it once more" },
+        ],
+        tip: "'ಊರು' (ooru) means town or hometown.",
+      },
+      {
+        reply: {
+          kn: "ನಿಮಗೆ ಕನ್ನಡ ಚೆನ್ನಾಗಿ ಬರುತ್ತೆ!",
+          tr: "Nimage kannada chennaagi baratte!",
+          en: "You speak Kannada well!",
+        },
+        suggestions: [
+          { kn: "ನನಗೆ ಕನ್ನಡ ಸ್ವಲ್ಪ ಸ್ವಲ್ಪ ಬರುತ್ತೆ", tr: "Nanage kannada swalpa swalpa baratte", en: "I know a little Kannada" },
+          { kn: "ಕನ್ನಡ ಕಲಿಯೋದು ಖುಷಿ", tr: "Kannada kaliyodu khushi", en: "Learning Kannada is a joy" },
+          { kn: "ದಯವಿಟ್ಟು ನಿಧಾನವಾಗಿ ಮಾತಾಡಿ", tr: "Dayavittu nidhaanavaagi maataadi", en: "Please speak slowly" },
+        ],
+        tip: "'ಬರುತ್ತೆ' (baratte) means 'it comes', so 'Kannada baratte' means 'I know Kannada'.",
+      },
+      {
+        reply: {
+          kn: "ತುಂಬ ಸಂತೋಷ! ಮತ್ತೆ ಬನ್ನಿ. ಹಬ್ಬದ ಶುಭಾಶಯಗಳು!",
+          tr: "Tumba santosha! Matte banni. Habbada shubhaashayagalu!",
+          en: "I am very happy! Come again. Festival wishes!",
+        },
+        suggestions: [
+          { kn: "ಧನ್ಯವಾದಗಳು, ಹೋಗಿ ಬರ್ತೀನಿ!", tr: "Dhanyavaadagalu, hogi bartini!", en: "Thank you, I will go and come back!" },
+        ],
+        tip: "'ಸಂತೋಷ' (santosha) means joy or happiness.",
+        completed: true,
+      },
+    ],
+  },
+  "clinic": {
+    steps: [
+      {
+        reply: {
+          kn: "ನಮಸ್ಕಾರ. ಏನಾಯ್ತು? ಹೇಗಿದ್ದೀರಾ?",
+          tr: "Namaskara. Enaaytu? Hegiddira?",
+          en: "Hello. What happened? How are you?",
+        },
+        suggestions: [
+          { kn: "ನನಗೆ ಹುಷಾರಿಲ್ಲ", tr: "Nanage hushaarilla", en: "I am not well" },
+          { kn: "ನನಗೆ ತಲೆನೋವು ಇದೆ", tr: "Nanage talenovu ide", en: "I have a headache" },
+          { kn: "ಡಾಕ್ಟರ್ ಬೇಕು", tr: "Doctor beku", en: "I need a doctor" },
+        ],
+        tip: "'ಹುಷಾರಿಲ್ಲ' (hushaarilla) means 'not well'. 'ಹುಷಾರಾಗಿ' (hushaaraagi) means 'take care / get well'.",
+      },
+      {
+        reply: {
+          kn: "ಅಯ್ಯೋ, ಚಿಂತೆ ಮಾಡಬೇಡಿ. ಯಾವಾಗಿಂದ ಹೀಗಿದೆ?",
+          tr: "Ayyo, chinte maadabedi. Yaavaaginda heegide?",
+          en: "Oh no, do not worry. Since when has it been like this?",
+        },
+        suggestions: [
+          { kn: "ನಿನ್ನೆಯಿಂದ", tr: "Ninneyinda", en: "Since yesterday" },
+          { kn: "ಇವತ್ತು ಬೆಳಿಗ್ಗೆಯಿಂದ", tr: "Ivattu beLigginda", en: "Since this morning" },
+          { kn: "ನನಗೆ ಸುಸ್ತಾಗಿದೆ", tr: "Nanage sustaagide", en: "I am tired" },
+        ],
+        tip: "'ಅಯ್ಯೋ' (ayyo) is a sympathetic 'oh no'.",
+      },
+      {
+        reply: {
+          kn: "ಸರಿ. ಸ್ವಲ್ಪ ಹೊತ್ತು ಕೂತ್ಕೊಳ್ಳಿ, ಡಾಕ್ಟರ್ ಬರ್ತಾರೆ.",
+          tr: "Sari. Swalpa hottu kootkolli, doctor bartaare.",
+          en: "Okay. Please sit for a while, the doctor is coming.",
+        },
+        suggestions: [
+          { kn: "ಸರಿ, ಧನ್ಯವಾದಗಳು", tr: "Sari, dhanyavaadagalu", en: "Okay, thank you" },
+          { kn: "ಎಷ್ಟು ಹೊತ್ತು ಬೇಕು?", tr: "Eshtu hottu beku?", en: "How long will it take?" },
+          { kn: "ನೀರು ಕೊಡಿ", tr: "Neeru kodi", en: "Water, please" },
+        ],
+        tip: "'ಬರ್ತಾರೆ' (bartaare) is the polite form of 'is coming'.",
+      },
+      {
+        reply: {
+          kn: "ಡಾಕ್ಟರ್ ಹೇಳ್ತಾರೆ: ವಿಶ್ರಾಂತಿ ತಗೊಳ್ಳಿ, ನೀರು ಜಾಸ್ತಿ ಕುಡೀರಿ.",
+          tr: "Doctor heltaare: vishraanti tagolli, neeru jaasti kudiri.",
+          en: "The doctor says: take rest and drink more water.",
+        },
+        suggestions: [
+          { kn: "ನನಗೆ ಅರ್ಥ ಆಯ್ತು", tr: "Nanage artha aaytu", en: "I understood" },
+          { kn: "ಇನ್ನೊಮ್ಮೆ ಹೇಳಿ", tr: "Innomme heli", en: "Please say it once more" },
+          { kn: "ದಯವಿಟ್ಟು ನಿಧಾನವಾಗಿ ಮಾತಾಡಿ", tr: "Dayavittu nidhaanavaagi maataadi", en: "Please speak slowly" },
+        ],
+        tip: "This is for practice only. In an emergency, call 112 in India.",
+      },
+      {
+        reply: {
+          kn: "ಎಲ್ಲಾ ಸರಿ ಹೋಗುತ್ತೆ. ಬೇಗ ಹುಷಾರಾಗಿ!",
+          tr: "Ellaa sari hogutte. Bega hushaaraagi!",
+          en: "Everything will be fine. Get well soon!",
+        },
+        suggestions: [
+          { kn: "ಧನ್ಯವಾದಗಳು", tr: "Dhanyavaadagalu", en: "Thank you" },
+        ],
+        tip: "'ಬೇಗ ಹುಷಾರಾಗಿ' (bega hushaaraagi) = 'get well soon'.",
         completed: true,
       },
     ],

@@ -2,13 +2,32 @@ import greetings from "@/content/units/greetings.json";
 import auto from "@/content/units/auto.json";
 import conversation from "@/content/units/conversation.json";
 import opinions from "@/content/units/opinions.json";
+import numbers from "@/content/units/numbers.json";
+import family from "@/content/units/family.json";
+import food from "@/content/units/food.json";
+import market from "@/content/units/market.json";
+import directions from "@/content/units/directions.json";
+import culture from "@/content/units/culture.json";
+import feelings from "@/content/units/feelings.json";
 import quests_ from "@/content/quests.json";
 import type { Lesson, Level, Phrase, Quest, Unit } from "./types";
 
 export const quests: Quest[] = quests_ as Quest[];
 
 /** Units appear on the home path in this order. Add a new JSON file and list it here. */
-export const units: Unit[] = [greetings, auto, conversation, opinions] as Unit[];
+export const units: Unit[] = [
+  greetings,
+  numbers,
+  family,
+  food,
+  auto,
+  market,
+  directions,
+  conversation,
+  opinions,
+  culture,
+  feelings,
+] as Unit[];
 
 export const allPhrases: Phrase[] = units.flatMap((u) => u.phrases);
 

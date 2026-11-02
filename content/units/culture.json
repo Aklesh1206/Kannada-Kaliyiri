@@ -1,0 +1,158 @@
+{
+  "id": "culture",
+  "title": "Culture and festivals",
+  "subtitle": "Greetings for festivals and speaking about Karnataka",
+  "level": "advanced",
+  "accent": "red",
+  "phrases": [
+    {
+      "id": "cu-habba",
+      "kn": "ಹಬ್ಬದ ಶುಭಾಶಯಗಳು",
+      "tr": "habbada shubhaashayagalu",
+      "alt": [
+        "habbada shubhashayagalu"
+      ],
+      "en": "Happy festival",
+      "reviewed": false
+    },
+    {
+      "id": "cu-ugadi",
+      "kn": "ಯುಗಾದಿ ಹಬ್ಬದ ಶುಭಾಶಯಗಳು",
+      "tr": "yugaadi habbada shubhaashayagalu",
+      "alt": [
+        "ugadi habbada shubhashayagalu"
+      ],
+      "en": "Happy Ugadi",
+      "reviewed": false
+    },
+    {
+      "id": "cu-deepavali",
+      "kn": "ದೀಪಾವಳಿಯ ಶುಭಾಶಯಗಳು",
+      "tr": "deepaavaliya shubhaashayagalu",
+      "alt": [
+        "deepavaliya shubhashayagalu"
+      ],
+      "en": "Happy Deepavali",
+      "reviewed": false
+    },
+    {
+      "id": "cu-huttuhabba",
+      "kn": "ಹುಟ್ಟುಹಬ್ಬದ ಶುಭಾಶಯಗಳು",
+      "tr": "huttuhabbada shubhaashayagalu",
+      "alt": [
+        "huttuhabbada shubhashayagalu"
+      ],
+      "en": "Happy birthday",
+      "reviewed": false
+    },
+    {
+      "id": "cu-nimagoo",
+      "kn": "ನಿಮಗೂ ಹಾಗೆಯೇ",
+      "tr": "nimagoo haageye",
+      "alt": [
+        "nimagu hageye"
+      ],
+      "en": "The same to you",
+      "reviewed": false
+    },
+    {
+      "id": "cu-dasara",
+      "kn": "ನಾವು ಮೈಸೂರು ದಸರಾ ನೋಡೋದಕ್ಕೆ ಹೋಗ್ತೀವಿ",
+      "tr": "naavu mysuru dasara nododakke hogtivi",
+      "alt": [
+        "navu mysuru dasara nododakke hogtivi"
+      ],
+      "en": "We are going to see the Mysuru Dasara",
+      "reviewed": false
+    },
+    {
+      "id": "cu-kalita",
+      "kn": "ಕನ್ನಡ ಕಲಿಯೋದು ಖುಷಿ",
+      "tr": "kannada kaliyodu khushi",
+      "en": "Learning Kannada is a joy",
+      "reviewed": false
+    },
+    {
+      "id": "cu-swalpa",
+      "kn": "ನನಗೆ ಕನ್ನಡ ಸ್ವಲ್ಪ ಸ್ವಲ್ಪ ಬರುತ್ತೆ",
+      "tr": "nanage kannada swalpa swalpa baratte",
+      "alt": [
+        "nanage kannada swalpa swalpa barutte"
+      ],
+      "en": "I know a little Kannada",
+      "reviewed": false
+    },
+    {
+      "id": "cu-innomme",
+      "kn": "ಇನ್ನೊಮ್ಮೆ ಹೇಳಿ",
+      "tr": "innomme heli",
+      "en": "Please say it once more",
+      "reviewed": false
+    },
+    {
+      "id": "cu-nidhaana",
+      "kn": "ದಯವಿಟ್ಟು ನಿಧಾನವಾಗಿ ಮಾತಾಡಿ",
+      "tr": "dayavittu nidhaanavaagi maataadi",
+      "alt": [
+        "dayavittu nidhanavagi mataadi"
+      ],
+      "en": "Please speak slowly",
+      "reviewed": false
+    },
+    {
+      "id": "cu-sundara",
+      "kn": "ಕರ್ನಾಟಕ ತುಂಬ ಸುಂದರವಾಗಿದೆ",
+      "tr": "karnataka tumba sundaravaagide",
+      "alt": [
+        "karnataka tumba sundaravagide"
+      ],
+      "en": "Karnataka is very beautiful",
+      "reviewed": false
+    },
+    {
+      "id": "cu-ooru",
+      "kn": "ನನಗೆ ನಿಮ್ಮ ಊರು ಇಷ್ಟ ಆಯ್ತು",
+      "tr": "nanage nimma ooru ishta aaytu",
+      "alt": [
+        "nanage nimma uru ishta aytu"
+      ],
+      "en": "I liked your town",
+      "reviewed": false
+    }
+  ],
+  "lessons": [
+    {
+      "id": "wishes",
+      "title": "Festival wishes",
+      "blurb": "Share good wishes",
+      "phrases": [
+        "cu-habba",
+        "cu-ugadi",
+        "cu-deepavali",
+        "cu-huttuhabba"
+      ]
+    },
+    {
+      "id": "travel-talk",
+      "title": "Talk about Karnataka",
+      "blurb": "Dasara and local pride",
+      "phrases": [
+        "cu-nimagoo",
+        "cu-dasara",
+        "cu-sundara",
+        "cu-ooru"
+      ]
+    },
+    {
+      "id": "learner",
+      "title": "Speaking as a learner",
+      "blurb": "Ask people to help you learn",
+      "phrases": [
+        "cu-kalita",
+        "cu-swalpa",
+        "cu-innomme",
+        "cu-nidhaana"
+      ]
+    }
+  ]
+}
