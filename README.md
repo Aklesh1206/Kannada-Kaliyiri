@@ -1,42 +1,182 @@
-# Kannada Kaliyiri
+# Kannada Kaliyiri (ಕನ್ನಡ ಕಲಿಯಿರಿ)
 
-A Duolingo-style web app for learning the Kannada people actually use day to day. Lessons are built around situations (greetings, auto rickshaw) instead of random word lists.
+**Learn Kannada by playing, speaking and chatting with Neela, the Karnataka state bird.**
 
-## Run it
+Kannada Kaliyiri is a friendly, web app for learning the Kannada people actually use day to day. Lessons are built around real situations (an auto ride, the market, a clinic visit, a festival) instead of random word lists. You can hear every phrase, play games, say phrases out loud and get word-by-word feedback, and role-play conversations with Neela, the mascot.
 
-1. Install Node.js 20 or newer from nodejs.org.
-2. Open the project folder in a terminal and run:
-   ```
-   npm install
-   npm run dev
-   ```
-3. Open http://localhost:3000
+- Live demo: _add your deployed link here_
+- Built solo by Aklesh as a hackathon project.
 
-No account, database or API key is needed. Progress (XP, streak, hearts, review schedule) is saved in the browser.
+---
 
-## Add audio (do this once, needs internet)
+## Contents
 
-The speaker buttons play `public/audio/<phrase id>.mp3`. Until those files exist, they use an online Kannada voice (needs internet), then the browser's own Kannada voice (only some devices have one). For reliable, offline sound, make the mp3 files once:
+- [Why this project](#why-this-project)
+- [Features](#features)
+- [Quick start](#quick-start)
+- [Configuration](#configuration)
+- [Project structure](#project-structure)
+- [How it works](#how-it-works)
+- [Talk with Neela](#talk-with-neela)
+- [Voice and audio](#voice-and-audio)
+- [Accounts, guests and cloud save](#accounts-guests-and-cloud-save)
+- [Adding content](#adding-content)
+- [Testing](#testing)
+- [Deploying](#deploying)
+- [Privacy and safety](#privacy-and-safety)
+- [Known limitations](#known-limitations)
+- [Roadmap](#roadmap)
+
+---
+
+## Why this project
+
+People who move to Karnataka, families abroad whose children don't speak Kannada, and visitors all run into the same problem: few tools teach Kannada well, and almost none let you practise speaking and get corrected. Kannada Kaliyiri puts lessons, games, spoken feedback and a friendly conversation partner in one place, and it works without an account or a paid key.
+
+## Features
+
+| Area | What you get |
+| --- | --- |
+| **Animated intro** | A loading animation when the app opens, then Neela greets you, introduces herself and asks your name and level. Shown once per visit. |
+| **Lessons** | 11 units, 33 lessons and 135 phrases across three levels (Beginner, Intermediate, Advanced). Exercise types: introduction cards, multiple choice (read, write, listen), matching, word order, typing and speaking. |
+| **Levels** | A slim level meter where Neela animates raising your level, an always-available level switcher, and games whose difficulty changes with the level. Each level keeps its own high scores. |
+| **Games** | Five games (Memory Flip, Speed Round, Sky Catch, Word Builder, Listen Up) and five story quests (for example an auto ride or a market trip). |
+| **Talk with Neela** | Pronunciation practice with word-by-word feedback, and chat in eight everyday scenes: auto ride, café, market, making friends, small talk, bus and metro, a festival visit, and not feeling well. |
+| **Voice** | Recorded Kannada voice for lessons, with automatic fallbacks, and a replay button on your own chat messages. |
+| **Progress** | XP, streak, hearts, spaced-repetition review (Leitner boxes) and a per-level leaderboard. |
+| **Guest mode** | Works with no sign-in. Nothing is stored until you sign in. |
+| **Cloud save** | Optional sign-in with Supabase: progress syncs across devices. |
+
+## Quick start
+
+You need **Node.js 20 or newer**.
+
+```bash
+npm install
+npm run dev
+```
+
+Open <http://localhost:3000>.
+
+No account, database or API key is needed to run the lessons, games, pronunciation practice and the built-in chat scenes.
+
+Useful scripts:
+
+| Command | What it does |
+| --- | --- |
+| `npm run dev` | Start the development server |
+| `npm run build` | Production build (run this before `typecheck` on a fresh clone, because it generates route types) |
+| `npm start` | Serve the production build |
+| `npm test` | Run the automated tests |
+| `npm run typecheck` | TypeScript check |
+| `npm run lint` | ESLint |
+
+## Configuration
+
+Copy `.env.example` to `.env.local` for local work, and add the same variables in your host's settings (Vercel or Netlify > Settings > Environment Variables) for the live site. **Never commit `.env.local`.**
+
+| Variable | Needed for | Notes |
+| --- | --- | --- |
+| `GEMINI_API_KEY` | AI chat with Neela | Free tier available from Google AI Studio. Server-side only. |
+| `ANTHROPIC_API_KEY` | AI chat with Neela | Alternative to Gemini. Server-side only. |
+| `AI_PROVIDER` | AI chat | `gemini` or `anthropic`, when both keys are set. |
+| `GEMINI_MODEL`, `ANTHROPIC_MODEL` | AI chat | Optional model overrides. |
+| `NEXT_PUBLIC_SUPABASE_URL` | Sign-in and cloud save | From Supabase > Project Settings > API. |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Sign-in and cloud save | The public anon key. |
+| `NEXT_PUBLIC_SHOW_TEST_LOGIN` | Local testing only | Set to `true` to show a shared test login on the Account page. Leave it unset on the live site. |
+
+Everything is optional. Without AI keys, chat uses the built-in conversations. Without Supabase keys, the app runs without cloud save.
+
+## Project structure
 
 ```
+app/                  Pages and API routes (Next.js App Router)
+  api/neela/          AI chat endpoint (keeps the AI key on the server)
+  api/tts/            Kannada voice proxy
+  games/, talk/, account/, leaderboard/, lesson/, review/
+components/           UI: lessons, games, Talk screen, Neela mascot, account panel
+  exercises/, games/, talk/
+content/
+  units/*.json        Lessons and phrases (the app's content)
+  quests.json         Story quests
+lib/                  Logic (kept free of UI so it can be tested)
+  exercises.ts        Turns a lesson into a queue of exercises
+  check.ts            Forgiving answer checking
+  progress.ts         XP, streak, hearts, review schedule, guest vs signed-in saving
+  games.ts            Game rules and per-level difficulty
+  pronounce.ts        Word-by-word pronunciation comparison and scoring
+  neelaAI.ts          AI prompt, input checks, reply validation, rate limit
+  offlineDialogues.ts Built-in chat scenes (work without any AI key)
+  audio.ts            Voice playback with fallbacks
+  cloud.ts, merge.ts  Supabase client and progress merging
+public/audio/         Pre-generated mp3 files for phrases
+scripts/              generate_audio.py (makes the mp3 files)
+supabase/             schema.sql, SETUP.md, env.example
+tests/                Automated tests
+```
+
+## How it works
+
+- **Exercises:** `lib/exercises.ts` builds a lesson's queue from its phrases. Wrong answers cost a heart and come back at the end of the lesson. Phrases of three or more words also get a word-order exercise.
+- **Answer checking:** `lib/check.ts` forgives common spelling variants (for example `neevu` and `nivu`) and one-letter slips in long words.
+- **Review:** `lib/progress.ts` keeps a Leitner-box schedule, so phrases you miss come back sooner on the Review page. Hearts refill every 15 minutes.
+- **Levels and games:** Each unit belongs to a level. Game difficulty comes from a per-level table, and high scores are stored per game and level.
+
+## Talk with Neela
+
+Open **Talk with Neela** from the home screen. It has two modes.
+
+**Pronunciation practice** works with no setup. Neela shows a phrase, you say it, and the app compares what the browser heard with the phrase, word by word:
+
+1. The target phrase and what was heard are lined up word by word.
+2. Each word is marked **right**, **close** or **wrong** (or missing).
+3. Slips are named: vowel length, aspirated sounds, retroflex sounds and sibilants.
+4. Scoring is simple and transparent: right = 1, close = 0.7, wrong = 0.2, missing = 0. A score of 0.85 or more is "great".
+
+**Chat with Neela** is a short role-play at your level. You can speak or type, in Kannada or English. Neela replies in Kannada with transliteration and English, and when your sentence can be said better she shows a corrected version you can practise straight away.
+
+- Without an AI key, chat uses the built-in conversations in `lib/offlineDialogues.ts`.
+- With a key, the browser calls `/api/neela`, which checks and trims the input, applies a rate limit, calls the provider, and accepts only valid JSON replies.
+
+Speech recognition uses your browser's own speech service, so use **Chrome or Edge**. Typing always works as a fallback.
+
+## Voice and audio
+
+Speaker buttons try these sources in order:
+
+1. `public/audio/<phrase id>.mp3` (best quality, works offline).
+2. For Neela's built-in chat lines, an mp3 named from the text (`t-<hash>.mp3`).
+3. The browser's own Kannada voice, if the device has one.
+4. `/api/tts`, a server route that fetches a Kannada voice.
+5. A direct online voice URL.
+6. If everything fails, a short message explains how to add a voice.
+
+To make the mp3 files once (needs internet):
+
+```bash
 pip install edge-tts
 python scripts/generate_audio.py
 ```
 
-Run it again whenever you add phrases. Existing files are skipped. Use `--voice kn-IN-GaganNeural` for a male voice.
+The script makes files for every lesson phrase and every built-in chat line, and skips files that already exist (`--force` redoes them, `--voice kn-IN-GaganNeural` gives a male voice). You can also run it on GitHub: **Actions > Generate audio > Run workflow**. It commits the files for you. Run it again whenever you add phrases or chat lines.
 
-## Speaking practice
+Replies written live by the AI have no pre-made file, so they use steps 3 to 5.
 
-Every lesson ends with up to two "Say it out loud" cards when the browser supports speech recognition (Chrome or Edge, needs internet). Tap the mic and say the phrase. It never costs a heart, can always be skipped, and earns 3 bonus XP for a good match.
+## Accounts, guests and cloud save
 
-## Add lessons
+- **Guest mode:** without signing in, progress lives in memory only and is gone when the page reloads. Nothing is written to the device.
+- **Signed in:** progress is saved on the device and synced to Supabase. What a guest did before signing in is kept and merged with their cloud data.
+- **Signing out** clears the device and returns to a blank guest.
 
-Everything lives in `content/units/*.json`. To add a lesson, add phrases to a unit's `phrases` list, then add a lesson that lists their ids. To add a whole unit, copy `auto.json`, then list it in `lib/content.ts`.
+To set up Supabase, follow [`supabase/SETUP.md`](supabase/SETUP.md): create a project, run `supabase/schema.sql`, set the redirect URLs and add the two environment variables. Row-level security in the schema keeps each learner's data private. If you enable "Confirm email", new users must click the link in the confirmation email before they can sign in.
 
-Each phrase has:
+## Adding content
+
+Everything lives in `content/units/*.json`. To add phrases, add them to a unit's `phrases` list, then add (or extend) a lesson that lists their ids. To add a whole unit, copy an existing unit file and list it in `lib/content.ts`.
 
 | Field | Meaning |
 | --- | --- |
+| `id` | Unique phrase id |
 | `kn` | Kannada script |
 | `tr` | Roman spelling learners read and type |
 | `alt` | Other accepted spellings (optional) |
@@ -44,94 +184,50 @@ Each phrase has:
 | `note` | Usage tip shown on the intro card (optional) |
 | `reviewed` | Set to `true` only after a Kannada speaker has checked the phrase |
 
-Every phrase ships with `reviewed: false`. The intro card tells learners the phrase is unchecked until you flip it, so get a native speaker to go through the JSON files before you demo.
+Every phrase ships with `reviewed: false`, and the intro card tells learners it is unchecked until you flip it. Have a native speaker go through the files before relying on them. A lesson needs at least three phrases.
 
-A lesson needs at least 3 phrases. Phrases of 3 or more words also get a word-order exercise.
+To add chat scenes, edit `lib/offlineDialogues.ts` (and the scenario descriptions in `lib/neelaAI.ts` for AI mode). To add story quests, edit `content/quests.json`.
 
-## How it works
+After adding phrases or chat lines, run the audio generator again.
 
-- `lib/exercises.ts` turns a lesson's phrases into a queue: intro cards, multiple choice (read, write, listen), matching, word order, typing.
-- `lib/check.ts` forgives common spelling variants (`neevu` and `nivu`, `dhanyavaadagalu` and `dhanyavadagalu`) and one-letter slips in long words.
-- `lib/progress.ts` holds XP, streak, hearts (they refill every 15 minutes) and a Leitner-box review schedule. Phrases you miss come back sooner on the Review page.
-- Wrong answers cost a heart and are asked again at the end of the lesson.
+## Testing
 
-## Checks
-
-```
-npm test          # content and exercise-engine tests
+```bash
+npm test
 npm run typecheck
 npm run lint
 npm run build
 ```
 
-## Next steps
+The tests cover content rules (unique ids, valid levels, quests that point at real phrases), exercises, answer checking, game rules, cloud merging, pronunciation scoring and the AI input and reply checks. The pure logic files in `lib/` have no UI imports on purpose, so Node can test them directly.
 
-- More chat scenarios (market, restaurant, directions).
-- Per-sound pronunciation drills based on the slips Neela hears most often.
+## Deploying
 
-## Accounts, Test Login & Leaderboard
+1. Push the project to GitHub (the project files must be at the **root** of the repository).
+2. Import the repository into Vercel or Netlify. The default Next.js settings work.
+3. Add the environment variables from [Configuration](#configuration).
+4. Run **Actions > Generate audio** once so voice files are committed.
 
-Open **Account** from the home screen header.
-- **Instant Test Login**: Tap **"⚡ 1-Click Test Sign In"** or use the pre-filled test credentials:
-  - **Email**: `test@kannada.com`
-  - **Password**: `password123`
-- **Account Creation**: Create any learner account with email & password. Works in local demo mode out of the box, or connects directly to Supabase when configured.
-- **Cloud save and sync (optional)**: To add multi-device cloud database sync across devices and a live public leaderboard, follow [`supabase/SETUP.md`](supabase/SETUP.md). When Supabase is not configured, a demo leaderboard and local test account are provided automatically.
+## Privacy and safety
 
-## Audio
+- API keys stay on the server and are never sent to the browser.
+- The Supabase anon key is meant to be public. Row-level security protects each learner's rows.
+- Speech is turned into text by the browser vendor's speech service. Typed or spoken chat text goes to your AI provider when AI chat is on. The app stores no audio.
+- Chat input is trimmed and limited, and each visitor is limited to 30 messages per 10 minutes. That limit is kept in memory per server instance, so also set a spending cap at your AI provider.
+- Guests leave nothing behind on their device.
 
-Speaker buttons play `public/audio/<phrase id>.mp3`. Make the files once, then commit them so the deployed site has them:
+## Known limitations
 
-- **On GitHub (no setup):** Actions > "Generate audio" > Run workflow. It commits the files for you.
-- **On your computer:** `pip install edge-tts`, then `python scripts/generate_audio.py`, then commit `public/audio`.
+- Kannada speech recognition in the browser is imperfect and works best in Chrome or Edge, so feedback is a guide, not a grade.
+- All phrases are marked `reviewed: false` until a native speaker checks them.
+- Live AI replies depend on an unofficial online voice or on a Kannada voice installed on the device.
+- The in-memory rate limit is per server instance and is not a hard guarantee.
 
-Without the files the app falls back to an online voice and then to the browser's own Kannada voice. Microsoft Edge has one; Chrome on Windows usually does not.
+## Roadmap
 
-## Talk with Neela (One-on-One Tutoring & Speaking Practice)
-
-Open **Talk with Neela** on the home screen. Neela (the friendly Indian Roller bird, ನೀಲಕಂಠ, Karnataka's state bird) is the app's representative and personal Kannada conversation coach.
-
-It has two training modes:
-
-- **Pronunciation practice**: Neela shows a phrase, you speak it, and the engine compares what the browser heard
-  with the phrase word by word. Words are marked right, close, or wrong, with instant phonetic coaching tips
-  (vowel length, aspirated sounds, retroflex consonants). Great attempts earn XP.
-- **Chat with Neela (One-on-One Conversational Training)**:
-  - **5 Real-Life Scenarios**:
-    - 🛺 **Auto ride**: Hail an auto in Bengaluru, check meter, give directions ("ರೈಟ್ ತಗೊಳ್ಳಿ", "ಸ್ವಲ್ಪ ಮುಂದೆ ನಿಲ್ಲಿಸಿ"), and pay via UPI.
-    - ☕ **Darshini / Cafe**: Order masala dosa & filter coffee, customize sugar, choose parcel or dine-in, and pay.
-    - 🛒 **Market shopping**: Inquire about fresh vegetables and fruits, ask prices per kg, bargain politely, and buy.
-    - 👋 **Making friends**: Warm introductions, sharing where you live and work, discussing learning Kannada.
-    - 💬 **Small talk**: Daily chit-chat about food, Bengaluru weather, and life in Karnataka.
-  - **Interactive Scaffolding**: Neela provides 2–3 suggested reply options with every turn (in Kannada script, Roman
-    transliteration, and English meaning), so beginners never get stuck. Tap to send or speak with the microphone!
-  - **Gentle Coaching**: If you speak English or make a Kannada grammar slip, Neela explains why kindly and shows
-    a better way to say it, with a "Practice saying this" button.
-  - **Audio Immersion**: Tap the speaker to hear Neela speak, or toggle "Auto-speak Neela's voice" for a hands-free conversation.
-  - **Mission Completion**: Finishing a conversation earns **+15 XP** and celebratory cheer from Neela.
-
-### Hybrid Setup (Zero Setup Required)
-
-- **Out of the box (no API key needed):** Neela runs interactive, branching guided conversations for all 5 scenarios with full suggestions, audio, and XP rewards.
-- **With a Cloud AI key (unlimited dynamic AI):** Add `GEMINI_API_KEY` (Google AI Studio free tier) or `ANTHROPIC_API_KEY` to `.env.local`:
-
-```
-GEMINI_API_KEY=your_gemini_api_key_here
-# or
-ANTHROPIC_API_KEY=your_anthropic_api_key_here
-```
-
-Optional: `AI_PROVIDER` (`gemini` or `anthropic`, when both keys exist), `GEMINI_MODEL`, `ANTHROPIC_MODEL`.
-
-Before sharing the site publicly, set a monthly spending cap at your AI provider. The app limits each visitor to
-30 messages per 10 minutes, but that limit is kept in memory per server instance, so it is a speed bump, not a guarantee.
-
-Privacy: speech goes to the browser vendor's speech service; typed or spoken chat text goes to your AI provider.
-This app stores no audio.
-
-### Built-in voice for Talk with Neela
-
-`scripts/generate_audio.py` also makes an mp3 for every built-in conversation line in `lib/offlineDialogues.ts`
-(named `t-<hash>.mp3`). Run the "Generate audio" GitHub Action once and commit the result: then Neela's built-in
-replies play on every device with no Kannada voice pack installed. Replies written live by the AI have no pre-made
-file, so they use `/api/tts` and then the browser voice.
+- Native-speaker review of all content.
+- Hundreds more phrases and more chat scenes.
+- Per-sound pronunciation drills based on the slips heard most often.
+- An installable app that works offline.
+- A teacher or parent view.
+- Support for more languages using the same engine.
