@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="360" viewBox="0 0 1200 360" role="img" aria-label="Animated learning loop: Learn, Play, Speak, Talk, then back to Learn">
+  <title>Learn, play, speak, talk</title>
+  <style>
+    .en { font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; }
+    .card { fill: #fffdf6; stroke: #e8dfc4; stroke-width: 3; }
+    .t { font-size: 34px; font-weight: 800; fill: #1c1b3a; text-anchor: middle; }
+    .d { font-size: 22px; fill: #3a3958; text-anchor: middle; }
+    .glow { fill: none; stroke: #ffc20e; stroke-width: 8; opacity: 0; }
+    .g1 { animation: step 8s infinite 0s; } .g2 { animation: step 8s infinite 2s; }
+    .g3 { animation: step 8s infinite 4s; } .g4 { animation: step 8s infinite 6s; }
+    @keyframes step { 0% { opacity: 0; } 4% { opacity: 1; } 24% { opacity: 1; } 28%,100% { opacity: 0; } }
+    .arrow { fill: #136f78; }
+    .back { fill: none; stroke: #136f78; stroke-width: 5; stroke-dasharray: 14 12; animation: dash 1.2s linear infinite; }
+    @keyframes dash { to { stroke-dashoffset: -26; } }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; } .glow { opacity: 0 !important; } }
+  </style>
+  <rect width="1200" height="360" rx="28" fill="#fbf6e8"/>
+  <g class="en">
+    <rect class="card" x="40" y="70" width="230" height="170" rx="24"/>
+    <rect class="glow g1" x="40" y="70" width="230" height="170" rx="24"/>
+    <text class="t" x="155" y="140">Learn</text>
+    <text class="d" x="155" y="180">short phrases</text>
+    <text class="d" x="155" y="208">at your level</text>
+
+    <rect class="card" x="340" y="70" width="230" height="170" rx="24"/>
+    <rect class="glow g2" x="340" y="70" width="230" height="170" rx="24"/>
+    <text class="t" x="455" y="140">Play</text>
+    <text class="d" x="455" y="180">games and</text>
+    <text class="d" x="455" y="208">story quests</text>
+
+    <rect class="card" x="640" y="70" width="230" height="170" rx="24"/>
+    <rect class="glow g3" x="640" y="70" width="230" height="170" rx="24"/>
+    <text class="t" x="755" y="140">Speak</text>
+    <text class="d" x="755" y="180">word-by-word</text>
+    <text class="d" x="755" y="208">feedback</text>
+
+    <rect class="card" x="940" y="70" width="230" height="170" rx="24"/>
+    <rect class="glow g4" x="940" y="70" width="230" height="170" rx="24"/>
+    <text class="t" x="1055" y="140">Talk</text>
+    <text class="d" x="1055" y="180">chat with Neela</text>
+    <text class="d" x="1055" y="208">in real scenes</text>
+  </g>
+  <polygon class="arrow" points="282,155 322,155 322,143 336,162 322,181 322,169 282,169"/>
+  <polygon class="arrow" points="582,155 622,155 622,143 636,162 622,181 622,169 582,169"/>
+  <polygon class="arrow" points="882,155 922,155 922,143 936,162 922,181 922,169 882,169"/>
+  <path class="back" d="M1055 252 L1055 300 L155 300 L155 252"/>
+  <polygon class="arrow" points="143,256 155,240 167,256"/>
+  <text class="en" x="600" y="338" text-anchor="middle" font-size="24" fill="#6b6a85">then it starts again, a little further along</text>
+</svg>

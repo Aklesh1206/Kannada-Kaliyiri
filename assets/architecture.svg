@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="470" viewBox="0 0 1200 470" role="img" aria-label="Animated architecture: the browser talks to the Next.js server and to Supabase, and the server calls the AI provider and the voice service">
+  <title>Architecture and data flow</title>
+  <style>
+    .en { font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; }
+    .h { font-size: 30px; font-weight: 800; }
+    .i { font-size: 22px; fill: #1c1b3a; }
+    .line { fill: none; stroke: #b9b2d6; stroke-width: 4; stroke-dasharray: 10 10; animation: dash 1.4s linear infinite; }
+    @keyframes dash { to { stroke-dashoffset: -20; } }
+    .lab { font-size: 20px; fill: #3a3958; font-weight: 700; }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+  </style>
+  <rect width="1200" height="470" rx="28" fill="#fbf6e8"/>
+  <g class="en">
+    <rect x="30" y="110" width="320" height="250" rx="22" fill="#fffdf6" stroke="#e8dfc4" stroke-width="3"/>
+    <text class="h" x="52" y="152" fill="#136f78">Browser</text>
+    <rect x="52" y="172" width="276" height="42" rx="10" fill="#dff1f2"/><text class="i" x="66" y="200">Next.js + React app</text>
+    <rect x="52" y="222" width="276" height="42" rx="10" fill="#dff1f2"/><text class="i" x="66" y="250">Progress store</text>
+    <rect x="52" y="272" width="276" height="42" rx="10" fill="#dff1f2"/><text class="i" x="66" y="300">Mic and voice (browser)</text>
+
+    <rect x="440" y="110" width="320" height="250" rx="22" fill="#fffdf6" stroke="#e8dfc4" stroke-width="3"/>
+    <text class="h" x="462" y="152" fill="#a06a00">Our server</text>
+    <rect x="462" y="172" width="276" height="42" rx="10" fill="#fff1c2"/><text class="i" x="476" y="200">/api/neela (AI chat)</text>
+    <rect x="462" y="222" width="276" height="42" rx="10" fill="#fff1c2"/><text class="i" x="476" y="250">/api/tts (voice)</text>
+    <rect x="462" y="272" width="276" height="42" rx="10" fill="#fff1c2"/><text class="i" x="476" y="300">Limits + input checks</text>
+
+    <rect x="850" y="30" width="320" height="130" rx="22" fill="#fffdf6" stroke="#e8dfc4" stroke-width="3"/>
+    <text class="h" x="872" y="72" fill="#b01e32">AI provider</text>
+    <text class="i" x="872" y="112">Gemini or Claude</text>
+    <text class="i" x="872" y="140">(key stays on server)</text>
+
+    <rect x="850" y="175" width="320" height="110" rx="22" fill="#fffdf6" stroke="#e8dfc4" stroke-width="3"/>
+    <text class="h" x="872" y="217" fill="#b01e32">Voice service</text>
+    <text class="i" x="872" y="257">Kannada text to speech</text>
+
+    <rect x="850" y="300" width="320" height="140" rx="22" fill="#fffdf6" stroke="#e8dfc4" stroke-width="3"/>
+    <text class="h" x="872" y="342" fill="#b01e32">Supabase</text>
+    <text class="i" x="872" y="382">Sign-in, saves, scores</text>
+    <text class="i" x="872" y="410">(row-level security)</text>
+  </g>
+
+  <path id="p1" class="line" d="M350 200 L440 200"/>
+  <path id="p2" class="line" d="M760 200 L850 90"/>
+  <path id="p3" class="line" d="M760 236 L850 230"/>
+  <path id="p4" class="line" d="M190 360 L190 440 L850 400"/>
+
+  <text class="en lab" x="395" y="184" text-anchor="middle" font-size="17">chat</text>
+    <text class="en lab" x="520" y="456" text-anchor="middle">save and sync</text>
+
+  <circle r="9" fill="#ffc20e"><animateMotion dur="2.2s" repeatCount="indefinite" path="M350 200 L440 200"/></circle>
+  <circle r="9" fill="#ffc20e"><animateMotion dur="2.2s" begin="0.4s" repeatCount="indefinite" path="M440 218 L350 218"/></circle>
+  <circle r="9" fill="#d7263d"><animateMotion dur="2.6s" repeatCount="indefinite" path="M760 200 L850 90"/></circle>
+  <circle r="9" fill="#d7263d"><animateMotion dur="2.6s" begin="1.1s" repeatCount="indefinite" path="M760 236 L850 230"/></circle>
+  <circle r="9" fill="#136f78"><animateMotion dur="3.4s" repeatCount="indefinite" path="M190 360 L190 440 L850 400"/></circle>
+</svg>

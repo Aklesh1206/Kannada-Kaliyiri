@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="320" viewBox="0 0 1200 320" role="img" aria-label="Kannada Kaliyiri banner: Neela the Indian Roller bird, with floating Kannada letters">
+  <title>Kannada Kaliyiri</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1c1b3a"/>
+      <stop offset="1" stop-color="#2f2d63"/>
+    </linearGradient>
+    <clipPath id="clip"><rect width="1200" height="320" rx="28"/></clipPath>
+  </defs>
+  <style>
+    .kn { font-family: 'Noto Sans Kannada', 'Nirmala UI', 'Kannada Sangam MN', 'Tunga', sans-serif; }
+    .en { font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; }
+    .letter { fill: #ffc20e; opacity: 0; font-size: 54px; font-weight: 700; animation: rise 7s linear infinite; }
+    .l2 { animation-delay: 1.2s; } .l3 { animation-delay: 2.4s; } .l4 { animation-delay: 3.6s; }
+    .l5 { animation-delay: 4.8s; } .l6 { animation-delay: 6s; }
+    @keyframes rise { 0% { transform: translateY(40px); opacity: 0; } 15% { opacity: .35; } 85% { opacity: .35; } 100% { transform: translateY(-300px); opacity: 0; } }
+    .title { animation: fadein 1.2s ease-out both; }
+    .sub { animation: fadein 1.2s ease-out .5s both; }
+    @keyframes fadein { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+    .bob { animation: bob 3s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+    @keyframes bob { 0%,100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-14px) rotate(2deg); } }
+    .wing { animation: flap 1.6s ease-in-out infinite; transform-box: fill-box; transform-origin: 80% 20%; }
+    @keyframes flap { 0%,100% { transform: rotate(0deg); } 50% { transform: rotate(-14deg); } }
+    .blink { animation: blink 4s infinite; transform-box: fill-box; transform-origin: center; }
+    @keyframes blink { 0%,94%,100% { transform: scaleY(1); } 97% { transform: scaleY(.1); } }
+    .ring { animation: pulse 3s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+    @keyframes pulse { 0%,100% { transform: scale(1); opacity: .9; } 50% { transform: scale(1.06); opacity: 1; } }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; opacity: 1 !important; } .letter { opacity: .25 !important; } }
+  </style>
+  <g clip-path="url(#clip)">
+    <rect width="1200" height="320" fill="url(#bg)"/>
+    <circle cx="1050" cy="160" r="135" fill="#ffc20e" class="ring"/>
+    <g class="kn">
+      <text class="letter" x="60" y="300">ಕ</text>
+      <text class="letter l2" x="260" y="300">ನ</text>
+      <text class="letter l3" x="470" y="300">ಡ</text>
+      <text class="letter l4" x="660" y="300">ಅ</text>
+      <text class="letter l5" x="820" y="300">ಆ</text>
+      <text class="letter l6" x="150" y="300">ಇ</text>
+    </g>
+    <g class="title kn">
+      <text x="70" y="140" fill="#ffc20e" font-size="40" font-weight="700">ಕನ್ನಡ ಕಲಿಯಿರಿ</text>
+    </g>
+    <g class="title en">
+      <text x="68" y="208" fill="#fbf6e8" font-size="76" font-weight="800">Kannada Kaliyiri</text>
+    </g>
+    <g class="sub en">
+      <text x="72" y="256" fill="#e9e3cf" font-size="26">Learn Kannada by playing, speaking and chatting with Neela</text>
+    </g>
+    <g class="bob">
+      <g transform="translate(40,0) scale(0.92)" >
+        <path d="M900 235 L850 285 L915 258 Z" fill="#2b6fd6"/>
+        <ellipse cx="1000" cy="190" rx="86" ry="68" fill="#1f8f9a"/>
+        <g class="wing"><ellipse cx="975" cy="198" rx="52" ry="38" fill="#2b6fd6"/></g>
+        <circle cx="1048" cy="132" r="50" fill="#1f8f9a"/>
+        <g class="blink"><circle cx="1062" cy="124" r="9" fill="#1c1b3a"/></g>
+        <path d="M1090 126 L1144 140 L1090 152 Z" fill="#1c1b3a"/>
+      </g>
+    </g>
+  </g>
+</svg>

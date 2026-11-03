@@ -1,8 +1,12 @@
+<p align="center">
+  <img src="assets/banner.svg" alt="Kannada Kaliyiri: Neela the Indian Roller with floating Kannada letters" width="100%">
+</p>
+
 # Kannada Kaliyiri (ಕನ್ನಡ ಕಲಿಯಿರಿ)
 
 **Learn Kannada by playing, speaking and chatting with Neela, the Karnataka state bird.**
 
-Kannada Kaliyiri is a friendly, web app for learning the Kannada people actually use day to day. Lessons are built around real situations (an auto ride, the market, a clinic visit, a festival) instead of random word lists. You can hear every phrase, play games, say phrases out loud and get word-by-word feedback, and role-play conversations with Neela, the mascot.
+Kannada Kaliyiri is a friendly, Duolingo-style web app for learning the Kannada people actually use day to day. Lessons are built around real situations (an auto ride, the market, a clinic visit, a festival) instead of random word lists. You can hear every phrase, play games, say phrases out loud and get word-by-word feedback, and role-play conversations with Neela, the mascot.
 
 - Live demo: _add your deployed link here_
 - Built solo by Aklesh as a hackathon project.
@@ -34,6 +38,10 @@ Kannada Kaliyiri is a friendly, web app for learning the Kannada people actually
 People who move to Karnataka, families abroad whose children don't speak Kannada, and visitors all run into the same problem: few tools teach Kannada well, and almost none let you practise speaking and get corrected. Kannada Kaliyiri puts lessons, games, spoken feedback and a friendly conversation partner in one place, and it works without an account or a paid key.
 
 ## Features
+
+<p align="center">
+  <img src="assets/learning-loop.svg" alt="Animated loop: Learn, Play, Speak, Talk, then back to Learn" width="100%">
+</p>
 
 | Area | What you get |
 | --- | --- |
@@ -90,6 +98,7 @@ Everything is optional. Without AI keys, chat uses the built-in conversations. W
 ## Project structure
 
 ```
+assets/               Animated SVGs used in this README
 app/                  Pages and API routes (Next.js App Router)
   api/neela/          AI chat endpoint (keeps the AI key on the server)
   api/tts/            Kannada voice proxy
@@ -116,6 +125,10 @@ tests/                Automated tests
 ```
 
 ## How it works
+
+<p align="center">
+  <img src="assets/architecture.svg" alt="Animated architecture: browser, our Next.js server, AI provider, voice service and Supabase" width="100%">
+</p>
 
 - **Exercises:** `lib/exercises.ts` builds a lesson's queue from its phrases. Wrong answers cost a heart and come back at the end of the lesson. Phrases of three or more words also get a word-order exercise.
 - **Answer checking:** `lib/check.ts` forgives common spelling variants (for example `neevu` and `nivu`) and one-letter slips in long words.
