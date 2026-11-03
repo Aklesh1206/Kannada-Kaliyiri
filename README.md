@@ -6,7 +6,7 @@
 
 **Learn Kannada by playing, speaking and chatting with Neela, the Karnataka state bird.**
 
-Kannada Kaliyiri is a friendly, Duolingo-style web app for learning the Kannada people actually use day to day. Lessons are built around real situations (an auto ride, the market, a clinic visit, a festival) instead of random word lists. You can hear every phrase, play games, say phrases out loud and get word-by-word feedback, and role-play conversations with Neela, the mascot.
+Kannada Kaliyiri is a friendly, web app for learning the Kannada people actually use day to day. Lessons are built around real situations (an auto ride, the market, a clinic visit, a festival) instead of random word lists. You can hear every phrase, play games, say phrases out loud and get word-by-word feedback, and role-play conversations with Neela, the mascot.
 
 - Live demo: _add your deployed link here_
 - Built solo by Aklesh as a hackathon project.
